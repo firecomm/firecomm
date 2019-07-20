@@ -12,5 +12,10 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 });
 
 var protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
+// console.log(Object.keys(protoDescriptor));
 var routeguide = protoDescriptor.routeguide;
+// console.log(Object.keys(routeguide));
+
+// console.log(routeguide.RouteGuide);
+// console.log(Object.keys(routeguide.RouteGuide.service));
 module.exports = routeguide;
