@@ -1,4 +1,4 @@
-const routeguide = require("./routeguide");
+const routeguide = require("../firecomm/routeguide");
 const grpc = require("grpc");
 
 const {

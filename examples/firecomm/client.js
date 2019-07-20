@@ -1,5 +1,7 @@
 const grpc = require("grpc");
 
+const firecomm = require("../../index");
+
 const routeguide = require("./routeguide");
 const interceptorProvider = require("./interceptorProvider");
 

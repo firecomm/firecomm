@@ -1,6 +1,6 @@
 const firecomm = require("../../index");
-const path = require("path");
-var PROTO_PATH = path.join(__dirname, "./proto.proto");
+
+const package = require("./packageDefinition");
 
 const {
   unaryChat,
@@ -8,8 +8,6 @@ const {
   clientStream,
   bidiChat
 } = require("./methodHandlers");
-
-const package = firecomm.build(PROTO_PATH);
 
 const server = new firecomm.Server();
 

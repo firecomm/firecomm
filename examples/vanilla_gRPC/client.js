@@ -1,6 +1,6 @@
 const grpc = require("grpc");
 
-const routeguide = require("./routeguide");
+const routeguide = require("../firecomm/routeguide");
 const interceptorProvider = require("./interceptorProvider");
 
 const stub = new routeguide.RouteGuide(
