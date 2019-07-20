@@ -1,0 +1,23 @@
+{
+  "name": "firecomm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oslabs-beta/firecomm.git"
+  },
+  "author": "Ian Geckeler",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/oslabs-beta/firecomm/issues"
+  },
+  "homepage": "https://github.com/oslabs-beta/firecomm#readme",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.5.1",
+    "grpc": "^1.22.2"
+  }
+}
