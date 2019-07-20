@@ -14,14 +14,22 @@ function serverStream(call) {
 }
 
 function clientStream(call, callback) {
-  console.log("is it callback");
-  call.on("data", data => {});
-  call.on("end", () => {});
+  // console.log(call.request);
+  // console.log("is it callback:", callback);
+  call.on("data", data => {
+    console.log("data:", data);
+  });
+  call.on("end", () => {
+    const trailer = new grpc.Metadata();
+    const response = { message: " World" };
+    callback(null, response, trailer);
+  });
 }
 
 function bidiChat(call) {
   call.on("data", data => {
-    console.log("data");
+    console.log("data:", data);
+    call.write({ message: data.message + " World" });
   });
 }
 
