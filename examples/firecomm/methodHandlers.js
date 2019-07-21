@@ -3,6 +3,8 @@ const grpc = require('grpc');
 function unaryChat(ctx) {
   console.log(ctx.req.meta);
   console.log(ctx.req.data);
+  ctx.setTrailer({'hello': 'trailer'})
+  // ctx.throw({err: 'bad'})
   ctx.setMeta({'hello': 'world'})
   ctx.send({message: 'what\'s up'})
   }
