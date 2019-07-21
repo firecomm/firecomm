@@ -1,35 +1,35 @@
-const grpc = require("grpc");
+const grpc = require('grpc');
 
 function unaryChat(call, callback) {
   const meta = new grpc.Metadata();
-  const { request } = call;
+  const {request} = call;
   console.log(request);
-  const response = { message: request.message + " World" };
+  const response = {message: request.message + ' World'};
   callback(null, response, meta);
-}
+  }
 
 function serverStream(call) {
-  const { request } = call;
-  call.write({ message: request.message + " World" });
-}
+  const {request} = call;
+  call.write({message: request.message + ' World'});
+  }
 
 function clientStream(call, callback) {
   // console.log(call.request);
   // console.log("is it callback:", callback);
-  call.on("data", data => {
-    console.log("data:", data);
+  call.on('data', data => {
+    console.log('data:', data);
   });
-  call.on("end", () => {
+  call.on('end', () => {
     const trailer = new grpc.Metadata();
-    const response = { message: " World" };
+    const response = {message: ' World'};
     callback(null, response, trailer);
   });
-}
+  }
 
 function bidiChat(call) {
-  call.on("data", data => {
-    console.log("data:", data);
-    call.write({ message: data.message + " World" });
+  call.on('data', data => {
+    console.log('data:', data);
+    call.write({message: data.message + ' World'});
   });
 }
 
