@@ -11,12 +11,12 @@ const package = require('./routeguide')
 
 const server = new firecomm.Server();
 
-// server.addService(
-//     package.RouteGuide, {unaryChat, serverStream, clientStream, bidiChat});
+server.addService(
+    package.RouteGuide, {unaryChat, serverStream, clientStream, bidiChat});
 
-server.server.addService(
-    package.RouteGuide.service,
-    {unaryChat, serverStream, clientStream, bidiChat});
+// server.server.addService(
+//     package.RouteGuide.service,
+//     {unaryChat, serverStream, clientStream, bidiChat});
 
 
 server.bind('0.0.0.0:3000')
