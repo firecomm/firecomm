@@ -23,7 +23,6 @@ const testUnaryChat = () => {
       firstChat, {interceptors: [interceptorProvider]}, (err, chat) => {
         if (err) console.log(err);
         console.log(stub.getChannel().getConnectivityState(true))
-
         console.log('response:', chat);
       });
 };
