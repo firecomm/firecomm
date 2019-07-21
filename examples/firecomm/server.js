@@ -18,10 +18,9 @@ server.server.addService(
     package.RouteGuide.service,
     {unaryChat, serverStream, clientStream, bidiChat});
 
-// server.server.bind('0.0.0.0:3000', grpc.ServerCredentials.createInsecure())
 
 server.bind('0.0.0.0:3000')
 
-server.server.start()
+server.start()
 
 console.log(server.server)
