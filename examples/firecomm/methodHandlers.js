@@ -1,12 +1,14 @@
 const grpc = require('grpc');
 
 function unaryChat(ctx) {
-  console.log(ctx.req.meta);
-  console.log(ctx.req.data);
-  ctx.setTrailer({'hello': 'trailer'})
-  // ctx.throw({err: 'bad'})
-  ctx.setMeta({'hello': 'world'})
-  ctx.send({message: 'what\'s up'})
+  ctx.setStatus({'trailer': 'value'});
+  ctx.throw('custom error message');
+  // console.log(ctx.req.meta);
+  // console.log(ctx.req.data);
+  // ctx.setTrailer({'hello': 'trailer'})
+  // // ctx.throw({err: 'bad'})
+  // ctx.setMeta({'hello': 'world'})
+  // ctx.send({message: 'what\'s up'})
   }
 
 // function unaryChat(call, callback) {
@@ -44,6 +46,7 @@ function bidiChat(context) {
     console.log('data:', data);
     context.write({message: data.message + ' World'});
   });
+  context.throw(new Error('error'));
   setTimeout(() => {
     context.end();
   }, 3000)

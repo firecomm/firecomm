@@ -21,7 +21,7 @@ const testUnaryChat = () => {
 
   stub.unaryChat(
       firstChat, {interceptors: [interceptorProvider]}, (err, chat) => {
-        if (err) console.log(err);
+        if (err) console.log({err});
         console.log(stub.getChannel().getConnectivityState(true))
         console.log('response:', chat);
       });
@@ -54,6 +54,9 @@ const testBidiChat = () => {
   duplexStream.on('data', (data) => {
     console.log(data);
   });
+  duplexStream.on('error', (err) => {
+    console.log({err});
+  })
 };
 
 testBidiChat();
