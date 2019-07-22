@@ -21,23 +21,23 @@ const testUnaryChat = () => {
 
   stub.unaryChat(
       firstChat, {interceptors: [interceptorProvider]}, (err, chat) => {
-        if (err) console.log(err);
+        if (err) console.log({err});
         console.log(stub.getChannel().getConnectivityState(true))
         console.log('response:', chat);
       });
 };
 
-testUnaryChat()
+// testUnaryChat()
 
-    const testClientStream = () => {
-      const clientStream = stub.clientStream((err, chat) => {
-        if (err) console.log(err);
-        console.log('response:', chat);
-      }, {interceptors: [interceptorProvider]});
+const testClientStream = () => {
+  const clientStream = stub.clientStream((err, chat) => {
+    if (err) console.log(err);
+    console.log('response:', chat);
+  }, {interceptors: [interceptorProvider]});
 
-      clientStream.write(firstChat);
-      clientStream.end();
-    };
+  clientStream.write(firstChat);
+  clientStream.end();
+};
 // testClientStream();
 
 const testServerStream = () => {
@@ -54,6 +54,9 @@ const testBidiChat = () => {
   duplexStream.on('data', (data) => {
     console.log(data);
   });
+  duplexStream.on('error', (err) => {
+    console.log({err});
+  })
 };
 
-// testBidiChat();
+testBidiChat();
