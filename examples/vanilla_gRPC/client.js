@@ -45,7 +45,7 @@ const testBidiChat = () => {
   const duplexStream = stub.bidiChat();
   duplexStream.write(firstChat);
   duplexStream.on('data', data => {
-    console.log(data);
+    console.log(data, 'dis');
   });
 };
 

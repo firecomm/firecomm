@@ -33,7 +33,7 @@ function clientStream(call, callback) {
     const response = {message: ' World'};
     callback(null, response, trailer);
   });
-  }
+}
 
 function bidiChat(call) {
   call.on('data', data => {
