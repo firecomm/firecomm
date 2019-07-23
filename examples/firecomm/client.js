@@ -1,17 +1,19 @@
 const grpc = require('grpc');
 const fs = require('fs');
+const path = require('path');
 const routeguide = require('./routeguide.js');
 
 const firecomm = require('../../index');
 
-let certificate = fs.readFileSync((__dirname + '/server.crt'))
+let certificate = path.join(__dirname, '/server.crt');
 
-// const stub = new firecomm.Stub(routeguide.RouteGuide, 'localhost:3000', grpc.credentials.createSsl(certificate));
+const stub =
+    new firecomm.Stub(routeguide.RouteGuide, 'localhost:3000', {certificate});
 
 // stub.openChannel('localhost:3000');
 
-const stub = new routeguide.RouteGuide(
-    'localhost:3000', new grpc.credentials.createSsl(certificate));
+// const stub = new routeguide.RouteGuide(
+//     'localhost:3000', new grpc.credentials.createSsl(certificate));
 // console.log(stub);
 
 const interceptorProvider = require('./interceptorProvider');
