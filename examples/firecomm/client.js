@@ -1,18 +1,22 @@
 const grpc = require('grpc');
 
+const routeguide = require('./routeguide');
 const firecomm = require('../../index');
 
-const routeguide = require('./routeguide');
+const fc = new firecomm.Client(routeguide.RouteGuide);
+
+fc.openChannel('localhost:3000');
+
 const interceptorProvider = require('./interceptorProvider');
 
-const stub = new routeguide.RouteGuide(
-    'localhost:3000', grpc.credentials.createInsecure());
+// const stub = new routeguide.RouteGuide(
+//     'localhost:3000', grpc.credentials.createInsecure());
 
-console.log(stub.getChannel().getConnectivityState(true))
+// console.log(stub.getChannel().getConnectivityState(true))
 
 
 
-    const firstChat = {
+const firstChat = {
   message: 'Hello',
 };
 
