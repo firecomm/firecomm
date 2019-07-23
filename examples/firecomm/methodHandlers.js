@@ -11,31 +11,16 @@ function unaryChat(ctx) {
   ctx.send({message: 'what\'s up'})
   }
 
-// function unaryChat(call, callback) {
-//   const meta = new grpc.Metadata();
-//   const {request} = call;
-//   console.log(request);
-//   const response = {message: request.message + ' World'};
-//   callback(null, response, meta);
-// }
+function serverStream(context) {
+  context.write({message: ' World'});
+};
 
-function serverStream(call) {
-  const {request} = call;
-  call.write({message: request.message + ' World'});
+function clientStream(context) {
+  console.log('serverStream context: ', context);
+  context.on('data', data => {console.log(data)});
+  context.send({message: 'world'})
   }
 
-function clientStream(call, callback) {
-  // console.log(call.request);
-  // console.log("is it callback:", callback);
-  call.on('data', data => {
-    console.log('data:', data);
-  });
-  call.on('end', () => {
-    const trailer = new grpc.Metadata();
-    const response = {message: ' World'};
-    callback(null, response, trailer);
-  });
-  }
 
 function bidiChat(context) {
   console.log('context', context);
