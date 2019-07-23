@@ -1,12 +1,12 @@
-const grpc = require("grpc");
-const protoLoader = require("@grpc/proto-loader");
+const grpc = require('grpc');
+const protoLoader = require('@grpc/proto-loader');
 
-const build = require("./lib/build");
-const Server = require("./lib/Server");
-const Client = require("./lib/Client");
+const build = require('./lib/build');
+const Server = require('./lib/Server');
+const Stub = require('./lib/Stub');
 
 module.exports = {
   Server,
-  Client,
+  Stub,
   build
 };

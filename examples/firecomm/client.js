@@ -3,30 +3,41 @@ const grpc = require('grpc');
 const routeguide = require('./routeguide');
 const firecomm = require('../../index');
 
-const fc = new firecomm.Client(routeguide.RouteGuide);
+const stub = new firecomm.Stub(routeguide.RouteGuide);
 
-fc.openChannel('localhost:3000');
+stub.openChannel('localhost:3000');
+
+// const stub = new routeguide.RouteGuide(
+//     'localhost:3000', new grpc.credentials.createInsecure());
 
 const interceptorProvider = require('./interceptorProvider');
 
-// const stub = new routeguide.RouteGuide(
-//     'localhost:3000', grpc.credentials.createInsecure());
-
-// console.log(stub.getChannel().getConnectivityState(true))
+console.log(Object.keys(stub))
 
 
+    // const stub = new routeguide.RouteGuide(
+    //     'localhost:3000', grpc.credentials.createInsecure());
 
-const firstChat = {
+    // console.log(stub.getChannel().getConnectivityState(true))
+
+
+
+    const firstChat = {
   message: 'Hello',
 };
 
+const {log: c} = console;
+
+stub.unaryChat(firstChat).then(res => c(res)).catch(err => c(err));
+
+
 const testUnaryChat = () => {
-  console.log(stub.getChannel().getConnectivityState(true))
+  // console.log(stub.getChannel().getConnectivityState(true))
 
   stub.unaryChat(
       firstChat, {interceptors: [interceptorProvider]}, (err, chat) => {
         if (err) console.log({err});
-        console.log(stub.getChannel().getConnectivityState(true))
+        // console.log(stub.getChannel().getConnectivityState(true))
         console.log('response:', chat);
       });
 };
@@ -63,4 +74,4 @@ const testBidiChat = () => {
   })
 };
 
-testBidiChat();
+// testBidiChat();

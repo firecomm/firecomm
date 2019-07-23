@@ -2,13 +2,13 @@ const grpc = require('grpc');
 
 function unaryChat(ctx) {
   ctx.setStatus({'trailer': 'value'});
-  ctx.throw('custom error message');
+  // ctx.throw(new Error('custom error message'));
   // console.log(ctx.req.meta);
   // console.log(ctx.req.data);
   // ctx.setTrailer({'hello': 'trailer'})
   // // ctx.throw({err: 'bad'})
   // ctx.setMeta({'hello': 'world'})
-  // ctx.send({message: 'what\'s up'})
+  ctx.send({message: 'what\'s up'})
   }
 
 // function unaryChat(call, callback) {
