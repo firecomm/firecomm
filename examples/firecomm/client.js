@@ -4,43 +4,56 @@ const routeguide = require('./routeguide.js');
 
 const firecomm = require('../../index');
 
-const interceptorProvider = require('./interceptorProvider');
+let certificate = fs.readFileSync((__dirname + '/server.crt'))
 
-let certificate = fs.readFileSync(__dirname + '/server.crt');
+// const stub = new firecomm.Stub(routeguide.RouteGuide, 'localhost:3000', grpc.credentials.createSsl(certificate));
+
+// stub.openChannel('localhost:3000');
 
 const stub = new routeguide.RouteGuide(
-    'localhost:3000', grpc.credentials.createSsl(certificate));
+    'localhost:3000', new grpc.credentials.createSsl(certificate));
+// console.log(stub);
+
+const interceptorProvider = require('./interceptorProvider');
+
+// console.log(Object.keys(stub))
+
+// const stub = generateStub(routeguide.RouteGuide);
+// const actualStub = new stub('localhost:3000',
+// grpc.credentials.createInsecure())
+// console.log(actualStub)
+
+// const stub = new routeguide.RouteGuide(
+//     'localhost:3000', grpc.credentials.createInsecure());
 
 // console.log(stub.getChannel().getConnectivityState(true))
-
-
 
 const firstChat = {
   message: 'Hello',
 };
 
-const testUnaryChat = () => {
-  console.log(stub.getChannel().getConnectivityState(true))
+const {log: c} = console;
 
-  stub.unaryChat(
-      firstChat, {interceptors: [interceptorProvider]}, (err, chat) => {
-        if (err) console.log({err});
-        console.log(stub.getChannel().getConnectivityState(true))
-        console.log('response:', chat);
-      });
+// stub.unaryChat(firstChat).then(res => c(res)).catch(err => c(err));
+
+const testUnaryChat = () => {
+  // console.log(stub.getChannel().getConnectivityState(true))
+
+  return stub.unaryChat(firstChat, {interceptors: [interceptorProvider]});
 };
 
-// testUnaryChat()
+testUnaryChat();
 
 const testClientStream = () => {
-  const clientStream = stub.clientStream((err, chat) => {
-    if (err) console.log(err);
-    console.log('response:', chat);
-  }, {interceptors: [interceptorProvider]});
 
+  const clientStream = stub.clientStream((err, res) => {
+    if (err) console.log(err)
+      console.log({res})
+  })
   clientStream.write(firstChat);
   clientStream.end();
 };
+
 // testClientStream();
 
 const testServerStream = () => {
@@ -51,8 +64,7 @@ const testServerStream = () => {
     console.log('data::', data), ' ///////////// ';
   });
 };
-
-testServerStream();
+// testServerStream();
 
 const testBidiChat = () => {
   const duplexStream = stub.bidiChat();
