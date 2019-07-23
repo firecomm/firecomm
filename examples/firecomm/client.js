@@ -50,7 +50,8 @@ const testClientStream = () => {
   clientStream.write(firstChat);
   clientStream.end();
 };
-testClientStream();
+
+// testClientStream();
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);
@@ -58,7 +59,7 @@ const testServerStream = () => {
     console.log('data::', data);
   });
 };
-// testServerStream();
+testServerStream();
 
 const testBidiChat = () => {
   const duplexStream = stub.bidiChat();
