@@ -1,18 +1,21 @@
 const grpc = require('grpc');
+const fs = require('fs');
+const routeguide = require('./routeguide.js');
 
 const firecomm = require('../../index');
 
-const routeguide = require('./routeguide');
 const interceptorProvider = require('./interceptorProvider');
 
+let certificate = fs.readFileSync(__dirname + '/server.crt');
+
 const stub = new routeguide.RouteGuide(
-    'localhost:3000', grpc.credentials.createInsecure());
+    'localhost:3000', grpc.credentials.createSsl(certificate));
 
-console.log(stub.getChannel().getConnectivityState(true))
+// console.log(stub.getChannel().getConnectivityState(true))
 
 
 
-    const firstChat = {
+const firstChat = {
   message: 'Hello',
 };
 
@@ -42,15 +45,18 @@ const testClientStream = () => {
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);
+  // const serverStream = stub.serverStream();
+  // serverStream.write({path: 'firstChat'});
   serverStream.on('data', (data) => {
-    console.log('data::', data);
+    console.log('data::', data), ' ///////////// ';
   });
 };
-// testServerStream();
+
+testServerStream();
 
 const testBidiChat = () => {
   const duplexStream = stub.bidiChat();
-  duplexStream.write(firstChat);
+  duplexStream.write({message: 'dickhead from client'});
   duplexStream.on('data', (data) => {
     console.log(data);
   });
@@ -59,4 +65,4 @@ const testBidiChat = () => {
   })
 };
 
-testBidiChat();
+// testBidiChat();

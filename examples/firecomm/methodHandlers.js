@@ -20,9 +20,10 @@ function unaryChat(ctx) {
 // }
 
 function serverStream(call) {
-  const {request} = call;
-  call.write({message: request.message + ' World'});
-  }
+  // const {request} = call;
+  console.log(call);
+  call.write({message: 'cheque' + ' World'});
+}
 
 function clientStream(call, callback) {
   // console.log(call.request);

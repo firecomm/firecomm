@@ -4,8 +4,11 @@ package routeguide;
 
 service RouteGuide {
   rpc UnaryChat(Chat) returns (Chat) {}
+
   rpc ServerStream(Chat) returns (stream Chat) {}
+
   rpc ClientStream(stream Chat) returns (Chat) {}
+  
   rpc BidiChat(stream Chat) returns (stream Chat) {}
 }
 
