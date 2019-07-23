@@ -6,13 +6,13 @@
   "scripts": {
     "start": "nodemon examples/vanilla_gRPC/server.js",
     "client": "nodemon examples/vanilla_gRPC/client.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/oslabs-beta/firecomm.git"
   },
-  "author": "Ian Geckeler",
+  "author": "Firecomm",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/oslabs-beta/firecomm/issues"
@@ -20,7 +20,8 @@
   "homepage": "https://github.com/oslabs-beta/firecomm#readme",
   "dependencies": {
     "@grpc/proto-loader": "^0.5.1",
-    "grpc": "^1.22.2"
+    "grpc": "^1.22.2",
+    "mocha": "^6.2.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"

@@ -4,7 +4,8 @@ const routeguide = require('../firecomm/routeguide');
 const interceptorProvider = require('./interceptorProvider');
 
 const stub = new routeguide.RouteGuide(
-    'localhost:3001', grpc.credentials.createInsecure());
+  'localhost:3001', grpc.credentials.createInsecure()
+);
 
 const firstChat = {
   message: 'Hello'
@@ -13,20 +14,20 @@ const firstChat = {
 
 const testUnaryChat = () => {
   stub.unaryChat(
-      firstChat, {interceptors: [interceptorProvider]}, function(err, chat) {
-        if (err) console.log(err);
-        console.log(stub.getChannel().getConnectivityState(true))
-        console.log('response:', chat);
-      });
+    firstChat, { interceptors: [interceptorProvider] }, function (err, chat) {
+      if (err) console.log(err);
+      console.log(stub.getChannel().getConnectivityState(true))
+      console.log('response:', chat);
+    });
 };
 
 testUnaryChat();
 
 const testClientStream = () => {
-  const clientStream = stub.clientStream(function(err, chat) {
+  const clientStream = stub.clientStream(function (err, chat) {
     if (err) console.log(err);
     console.log('response:', chat);
-  }, {interceptors: [interceptorProvider]});
+  }, { interceptors: [interceptorProvider] });
 
   clientStream.write(firstChat);
   clientStream.end();
