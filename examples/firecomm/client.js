@@ -3,24 +3,27 @@ const grpc = require('grpc');
 const routeguide = require('./routeguide');
 const firecomm = require('../../index');
 
-const stub = new firecomm.Stub(routeguide.RouteGuide);
+const stub = new firecomm.Stub(routeguide.RouteGuide, 'localhost:3000');
 
-stub.openChannel('localhost:3000');
+// stub.openChannel('localhost:3000');
 
 // const stub = new routeguide.RouteGuide(
 //     'localhost:3000', new grpc.credentials.createInsecure());
+// console.log(stub);
 
 const interceptorProvider = require('./interceptorProvider');
 
-console.log(Object.keys(stub))
+// console.log(Object.keys(stub))
 
+// const stub = generateStub(routeguide.RouteGuide);
+// const actualStub = new stub('localhost:3000',
+// grpc.credentials.createInsecure())
+// console.log(actualStub)
 
-    // const stub = new routeguide.RouteGuide(
-    //     'localhost:3000', grpc.credentials.createInsecure());
+// const stub = new routeguide.RouteGuide(
+//     'localhost:3000', grpc.credentials.createInsecure());
 
-    // console.log(stub.getChannel().getConnectivityState(true))
-
-
+// console.log(stub)
 
     const firstChat = {
   message: 'Hello',
@@ -28,7 +31,7 @@ console.log(Object.keys(stub))
 
 const {log: c} = console;
 
-stub.unaryChat(firstChat).then(res => c(res)).catch(err => c(err));
+// stub.unaryChat(firstChat).then(res => c(res)).catch(err => c(err));
 
 
 const testUnaryChat = () => {
@@ -42,17 +45,17 @@ const testUnaryChat = () => {
       });
 };
 
-// testUnaryChat()
+testUnaryChat()
 
-const testClientStream = () => {
-  const clientStream = stub.clientStream((err, chat) => {
-    if (err) console.log(err);
-    console.log('response:', chat);
-  }, {interceptors: [interceptorProvider]});
+    const testClientStream = () => {
+      const clientStream = stub.clientStream((err, chat) => {
+        if (err) console.log(err);
+        console.log('response:', chat);
+      }, {interceptors: [interceptorProvider]});
 
-  clientStream.write(firstChat);
-  clientStream.end();
-};
+      clientStream.write(firstChat);
+      clientStream.end();
+    };
 // testClientStream();
 
 const testServerStream = () => {
