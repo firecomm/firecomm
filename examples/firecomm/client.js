@@ -39,18 +39,18 @@ const testUnaryChat = () => {
   return stub.unaryChat(firstChat, {interceptors: [interceptorProvider]});
 };
 
-testUnaryChat();
+// testUnaryChat();
 
 const testClientStream = () => {
-  const clientStream = stub.clientStream((err, chat) => {
-    if (err) console.log(err);
-    console.log('response:', chat);
-  }, {interceptors: [interceptorProvider]});
 
+  const clientStream = stub.clientStream((err, res) => {
+    if (err) console.log(err)
+      console.log({res})
+  })
   clientStream.write(firstChat);
   clientStream.end();
 };
-// testClientStream();
+testClientStream();
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);

@@ -18,6 +18,7 @@ function serverStream(context) {
 function clientStream(context) {
   console.log('serverStream context: ', context);
   context.on('data', data => {console.log(data)});
+  context.send({message: 'world'})
   }
 
 
