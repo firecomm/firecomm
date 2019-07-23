@@ -15,31 +15,26 @@ const interceptorProvider = require('./interceptorProvider');
 console.log(Object.keys(stub))
 
 
-    // const stub = new routeguide.RouteGuide(
-    //     'localhost:3000', grpc.credentials.createInsecure());
+// const stub = new routeguide.RouteGuide(
+//     'localhost:3000', grpc.credentials.createInsecure());
 
-    // console.log(stub.getChannel().getConnectivityState(true))
+// console.log(stub.getChannel().getConnectivityState(true))
 
+const firstChat = { message: 'Hello', };
 
-
-    const firstChat = {
-  message: 'Hello',
-};
-
-const {log: c} = console;
+const { log: c } = console;
 
 stub.unaryChat(firstChat).then(res => c(res)).catch(err => c(err));
-
 
 const testUnaryChat = () => {
   // console.log(stub.getChannel().getConnectivityState(true))
 
   stub.unaryChat(
-      firstChat, {interceptors: [interceptorProvider]}, (err, chat) => {
-        if (err) console.log({err});
-        // console.log(stub.getChannel().getConnectivityState(true))
-        console.log('response:', chat);
-      });
+    firstChat, { interceptors: [interceptorProvider] }, (err, chat) => {
+      if (err) console.log({ err });
+      // console.log(stub.getChannel().getConnectivityState(true))
+      console.log('response:', chat);
+    });
 };
 
 // testUnaryChat()
@@ -48,12 +43,13 @@ const testClientStream = () => {
   const clientStream = stub.clientStream((err, chat) => {
     if (err) console.log(err);
     console.log('response:', chat);
-  }, {interceptors: [interceptorProvider]});
+  }, { interceptors: [interceptorProvider] });
 
   clientStream.write(firstChat);
   clientStream.end();
 };
-// testClientStream();
+testClientStream();
+
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);
@@ -70,7 +66,7 @@ const testBidiChat = () => {
     console.log(data);
   });
   duplexStream.on('error', (err) => {
-    console.log({err});
+    console.log({ err });
   })
 };
 
