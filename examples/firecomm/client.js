@@ -25,34 +25,31 @@ const interceptorProvider = require('./interceptorProvider');
 
 // console.log(stub.getChannel().getConnectivityState(true))
 
-const firstChat = { message: 'Hello', };
+const firstChat = {
+  message: 'Hello',
+};
 
-const { log: c } = console;
+const {log: c} = console;
 
 // stub.unaryChat(firstChat).then(res => c(res)).catch(err => c(err));
 
 const testUnaryChat = () => {
   // console.log(stub.getChannel().getConnectivityState(true))
 
-  stub.unaryChat(
-    firstChat, { interceptors: [interceptorProvider] }, (err, chat) => {
-      if (err) console.log({ err });
-      // console.log(stub.getChannel().getConnectivityState(true))
-      console.log('response:', chat);
-    });
+  return stub.unaryChat(firstChat, {interceptors: [interceptorProvider]});
 };
 
-testUnaryChat()
+testUnaryChat();
 
-    const testClientStream = () => {
-      const clientStream = stub.clientStream((err, chat) => {
-        if (err) console.log(err);
-        console.log('response:', chat);
-      }, {interceptors: [interceptorProvider]});
+const testClientStream = () => {
+  const clientStream = stub.clientStream((err, chat) => {
+    if (err) console.log(err);
+    console.log('response:', chat);
+  }, {interceptors: [interceptorProvider]});
 
-      clientStream.write(firstChat);
-      clientStream.end();
-    };
+  clientStream.write(firstChat);
+  clientStream.end();
+};
 // testClientStream();
 
 const testServerStream = () => {
@@ -70,7 +67,7 @@ const testBidiChat = () => {
     console.log(data);
   });
   duplexStream.on('error', (err) => {
-    console.log({ err });
+    console.log({err});
   })
 };
 
