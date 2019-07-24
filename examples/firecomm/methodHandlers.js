@@ -8,7 +8,7 @@ function unaryChat(ctx) {
   // ctx.setTrailer({'hello': 'trailer'})
   // // ctx.throw({err: 'bad'})
   // ctx.setMeta({'hello': 'world'})
-  ctx.send({message: 'what\'s up'})
+  ctx.send({message: 'what\'s up'});
   }
 
 function serverStream(context) {
