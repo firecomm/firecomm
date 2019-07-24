@@ -1,14 +1,19 @@
 const grpc = require('grpc');
+const fs = require('fs');
+const path = require('path');
+const routeguide = require('./routeguide.js');
 
-const routeguide = require('./routeguide');
 const firecomm = require('../../index');
 
-const stub = new firecomm.Stub(routeguide.RouteGuide, 'localhost:3000');
+let certificate = path.join(__dirname, '/server.crt');
+
+const stub =
+    new firecomm.Stub(routeguide.RouteGuide, 'localhost:3000', {certificate});
 
 // stub.openChannel('localhost:3000');
 
 // const stub = new routeguide.RouteGuide(
-//     'localhost:3000', new grpc.credentials.createInsecure());
+//     'localhost:3000', new grpc.credentials.createSsl(certificate));
 // console.log(stub);
 
 const interceptorProvider = require('./interceptorProvider');
@@ -39,7 +44,7 @@ const testUnaryChat = () => {
   return stub.unaryChat(firstChat, {interceptors: [interceptorProvider]});
 };
 
-// testUnaryChat();
+testUnaryChat();
 
 const testClientStream = () => {
 
@@ -55,15 +60,17 @@ const testClientStream = () => {
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);
+  // const serverStream = stub.serverStream();
+  // serverStream.write({path: 'firstChat'});
   serverStream.on('data', (data) => {
-    console.log('data::', data);
+    console.log('data::', data), ' ///////////// ';
   });
 };
-testServerStream();
+// testServerStream();
 
 const testBidiChat = () => {
   const duplexStream = stub.bidiChat();
-  duplexStream.write(firstChat);
+  duplexStream.write({message: 'dickhead from client'});
   duplexStream.on('data', (data) => {
     console.log(data);
   });

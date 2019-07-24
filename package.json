@@ -6,7 +6,10 @@
   "scripts": {
     "start": "nodemon examples/vanilla_gRPC/server.js",
     "client": "nodemon examples/vanilla_gRPC/client.js",
-    "test": "mocha"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-FC": "nodemon examples/firecomm/server.js",
+    "client-FC": "nodemon examples/firecomm/client.js",
+    "test2": "mocha"
   },
   "repository": {
     "type": "git",
