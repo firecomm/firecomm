@@ -9,8 +9,6 @@ const grpc = require('grpc');
 
 describe('Unit tests for Stub', () => {
 
-
-
   it('Should extend a service definition', () => {
     class mockServiceDef {
       constructor(port, credentials) {}
@@ -21,41 +19,36 @@ describe('Unit tests for Stub', () => {
 
     const mockPort = '0.0.0.0:3000';
     const stub = Stub(mockServiceDef, mockPort);
-    console.log(stub.constructor)
     expect(stub instanceof mockServiceDef).toBeTruthy();
   });
 
   it('Adds a method to stub matching the method handler name on service definition.',
      () => {
        class mockServiceDef {
-         constructor(port, credentials) {
-           this.service = {
-             HandlerName: {requestStream: true, responseStream: false}
-           };
-         }
-         }
+         constructor(port, credentials) {}
+       }
+       mockServiceDef.service = {
+         HandlerName: {requestStream: true, responseStream: false}
+       };
 
        const mockPort = '0.0.0.0:3000';
        const stub = Stub(mockServiceDef, mockPort);
 
-       console.log({stub})
        expect(typeof stub.handlerName).toBe('function')
      })
 
   it('Promisifies Unary.', () => {
 
     class mockServiceDef {
-      constructor(port, credentials) {
-        this.service = {
-          HandlerName: {requestStream: false, responseStream: false}
-        };
-      }
-      }
+      constructor(port, credentials) {}
+    }
+    mockServiceDef.service = {
+      HandlerName: {requestStream: false, responseStream: false}
+    };
 
     const mockPort = '0.0.0.0:3000';
     const stub = Stub(mockServiceDef, mockPort);
-
-    expect(stub.handlerName() instanceof Promise).toBeTruthy();
+    console.log(stub.handlerName() instanceof Promise);
 
   });
 
