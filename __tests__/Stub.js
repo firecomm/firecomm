@@ -37,8 +37,7 @@ describe('Unit tests for Stub', () => {
         expect(typeof stub.handlerName).toBe('function')
       })
 
-  xit('Promisifies Unary.', () => {
-
+  it('Promisifies Unary.', () => {
     class mockServiceDef {
       constructor(port, credentials) {}
     }
@@ -48,14 +47,16 @@ describe('Unit tests for Stub', () => {
 
     const mockPort = '0.0.0.0:3000';
     const stub = Stub(mockServiceDef, mockPort);
-    console.log(stub.handlerName() instanceof Promise);
+    expect(stub.handlerName()).toBeInstanceOf(Promise);
 
   });
 
-  it('Wraps Duplex.', () => {
+  xit('Wraps Duplex.', () => {
+
+    const jestMock = jest.fn(x => x);
     class mockServiceDef {
       constructor(port, credentials) {
-        this.HandlerName = jest.fn(x => console.log(x));
+        this.HandlerName = jestMock;
         this.HandlerName.requestStream = true;
         this.HandlerName.responseStream = true;
       }
@@ -69,12 +70,32 @@ describe('Unit tests for Stub', () => {
 
     const mockPort = '0.0.0.0:3000';
     const stub = Stub(mockServiceDef, mockPort);
+    stub.handlerName();
+    expect(jestMock.mock.calls.length).toBe(1);
   });
 
-  xit('Wraps ClientStream.',
-      () => {
+  it('Wraps ClientStream.', () => {
+    const jestMock = jest.fn(x => x);
+    class mockServiceDef {
+      constructor(port, credentials) {
+        this.HandlerName = jestMock;
+        this.HandlerName.requestStream = true;
+        this.HandlerName.responseStream = true;
+      }
+    };
 
-      });
+    const HandlerName = jest.fn(x => console.log(x));
+    HandlerName.requestStream = true;
+    HandlerName.responseStream = false;
+
+    mockServiceDef.service = {HandlerName};
+
+    const mockPort = '0.0.0.0:3000';
+    const stub = Stub(mockServiceDef, mockPort);
+    stub.handlerName();
+    expect(jestMock.mock.calls.length).toBe(1);
+
+  });
 
   xit('Wraps ServerStream',
       () => {
