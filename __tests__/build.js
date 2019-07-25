@@ -9,7 +9,7 @@ describe('Unit tests for build',  () => {
   })
   describe('test strict typing of config object properties', () => {
     test('config object\'s keepcase must be a boolean', () => {
-      expect(() => build(PROTO_PATH, {keepcase: undefined})).toThrow()
+      expect(() => build(PROTO_PATH, {keepCase: Object})).toThrow()
     })
     test('config object\'s longs must be a boolean', () => {
       expect(() => build(PROTO_PATH, {longs: Object})).toThrow()
