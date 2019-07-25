@@ -3,14 +3,21 @@ const grpc = require('grpc');
 
 // Mock the grpc server implementation
 
-const mockServer = jest.mock('./mocks/Server.js');
+const MockServer = require('./mocks/Server')
+jest.mock('./mocks/Server.js');
+
+console.log(new MockServer)
+
+console.log({MockServer});
+
+console.log(MockServer.mockImplementation());
 
 describe('Unit tests for Server', () => {
 
-  xit('Constructor extends the server class', () => {
+  xit('Constructor extends the grpc server class.', () => {
     const server = new Server();
     expect(server instanceof grpc.Server).toBeTruthy();
-  })
+  });
 
 
   it('Server bind throws an error when you pass in an object as a port.',
@@ -20,19 +27,9 @@ describe('Unit tests for Server', () => {
          server.bind({port: '0.0.0.0:3000'});
        }).toThrow();
      });
-  xit('Is an extension of the grpc server class.',
-      () => {
-
-      })
 
   xit('Add service connects services to the server.',
       () => {
 
-      })
-
-  xit('',
-      () => {
-
-      })
-
+      });
 });
