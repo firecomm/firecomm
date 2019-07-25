@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon examples/vanilla_gRPC/server.js",
     "client": "nodemon examples/vanilla_gRPC/client.js",
-    "test": "jest --verbose --watchAll",
+    "test": "jest --verbose",
     "test-coverage": "jest --verbose --coverage",
     "start-FC": "nodemon examples/firecomm/server.js",
     "client-FC": "nodemon examples/firecomm/client.js",

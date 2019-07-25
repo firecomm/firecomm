@@ -3,18 +3,18 @@ const grpc = require('grpc');
 
 // Mock the grpc server implementation
 
-const MockServer = require('./mocks/Server')
-jest.mock('./mocks/Server.js');
+// const MockServer = require('./mocks/Server')
+// jest.mock('./mocks/Server.js');
 
-console.log(new MockServer)
+// console.log(new MockServer)
 
-console.log({MockServer});
+// console.log({MockServer});
 
-console.log(MockServer.mockImplementation());
+// console.log(MockServer.mockImplementation());
 
 describe('Unit tests for Server', () => {
 
-  xit('Constructor extends the grpc server class.', () => {
+  it('Constructor extends the grpc server class.', () => {
     const server = new Server();
     expect(server instanceof grpc.Server).toBeTruthy();
   });
