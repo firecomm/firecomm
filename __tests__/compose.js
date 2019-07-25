@@ -1,19 +1,66 @@
 const compose = require('../lib/compose');
 
 describe('Unit tests for compose', () => {
-  const arrayOfFuns = [
-    (context) => {},
-    (context) => {
-
-    }
+  let arrayOrder = [];
+  const arrayOfFuncs = [
+    (ctx) => {arrayOrder.push(1)},
+    (ctx) => {arrayOrder.push(2)},
+    (ctx) => {arrayOrder.push(3)},
+    (ctx) => {arrayOrder.push(4)},
   ];
   const mockServiceDef = {
-    HandlerName: {requestStream: false, responseStream: false}
+    UnaryCall: {requestStream: false, responseStream: false},
+    ClientStream: {requestStream: true, responseStream: false},
+    ServerStream: {requestStream: false, responseStream: true},
+    DuplexStream: {requestStream: true, responseStream: true},
   }
 
-  it('Returns a function',
-     () => {expect(typeof compose(
-                       {handler: 'handlerName', middlewareStack: arrayOfFuns},
-                       mockServiceDef))
-                .toBe('function')})
+  test('Returns a unary composed function', () => {
+    expect(
+      typeof 
+      compose({ 
+      handler: 'unaryCall', 
+      middlewareStack: arrayOfFuncs
+    }, 
+    mockServiceDef)
+    )
+    .toBe('function')
+  })
+
+  test('Returns a client-side streaming composed function', () => {
+    expect(
+      typeof 
+      compose({ 
+      handler: 'clientStream', 
+      middlewareStack: arrayOfFuncs
+    }, 
+    mockServiceDef)
+    )
+    .toBe('function')
+  })
+
+  test('Returns a server-side streaming composed function', () => {
+    expect(
+      typeof 
+      compose({ 
+      handler: 'serverStream', 
+      middlewareStack: arrayOfFuncs
+    }, 
+    mockServiceDef)
+    )
+    .toBe('function')
+  })
+
+  test('Returns a bidirectional composed function', () => {
+    expect(
+      typeof 
+      compose({ 
+      handler: 'duplexStream', 
+      middlewareStack: arrayOfFuncs
+    }, 
+    mockServiceDef)
+    )
+    .toBe('function')
+  })
+
 })
