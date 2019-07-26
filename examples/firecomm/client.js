@@ -45,9 +45,9 @@ const testUnaryChat = () => {
   return stub.unaryChat(firstChat, { interceptors: [interceptorProvider] });
 };
 
-testUnaryChat()
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// testUnaryChat()
+//   .then(data => console.log(data))
+//   .catch(err => console.error(err));
 
 const testClientStream = () => {
   const clientStream = stub.clientStream((err, res) => {
@@ -58,7 +58,7 @@ const testClientStream = () => {
   clientStream.end();
 };
 
-testClientStream();
+// testClientStream();
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);
@@ -83,4 +83,4 @@ const testBidiChat = () => {
   });
 };
 
-// testBidiChat();
+testBidiChat();
