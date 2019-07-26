@@ -42,7 +42,14 @@ describe("Unit tests for Server", () => {
     ).toBe("AsyncFunction");
   });
 
-  xit("addService throws an error when you add a handlername not included in the service.", () => {});
+  it("addService throws an error when you add a handlername not included in the service.", () => {
+    const server = new Server();
+    expect(() => {
+      server.addService(testService, {
+        unaryCatz: jest.fn(function() {})
+      });
+    }).toThrow();
+  });
 
   xit("addService adds the right amount of functions.", () => {});
 
