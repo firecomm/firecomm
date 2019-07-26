@@ -42,7 +42,7 @@ describe("Unit tests for Server", () => {
     ).toBe("AsyncFunction");
   });
 
-  it("addService throws an error when you add a handlername not included in the service.", () => {
+  xit("addService throws an error when you add a handlername not included in the service.", () => {
     const server = new Server();
     expect(() => {
       server.addService(testService, {
@@ -51,9 +51,20 @@ describe("Unit tests for Server", () => {
     }).toThrow();
   });
 
-  xit("addService adds the right amount of functions.", () => {});
-
-  xit("addService composes a service level middleware function that gets called when you call the handler.", () => {});
-
-  xit("addService turns a unary service into a handler.", () => {});
+  it("addService composes a service level middleware function that gets called when you call the handler.", () => {
+    const server = new Server();
+    const mockMiddleware = jest.fn(function() {});
+    server.addService(
+      testService,
+      {
+        unaryCall: jest.fn(function() {})
+      },
+      mockMiddleware
+    );
+    const fakeObject = {};
+    console.log(
+      server.handlers[Object.keys(server.handlers)[0]].func(fakeObject)
+    );
+    expect(mockMiddleware.mock.calls.length).toBe(1);
+  });
 });
