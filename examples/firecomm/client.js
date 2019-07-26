@@ -58,7 +58,7 @@ const testClientStream = () => {
   clientStream.end();
 };
 
-// testClientStream();
+testClientStream();
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);
@@ -83,4 +83,4 @@ const testBidiChat = () => {
   });
 };
 
-testBidiChat();
+// testBidiChat();
