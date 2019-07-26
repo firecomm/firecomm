@@ -51,7 +51,7 @@ describe("Unit tests for Server", () => {
     }).toThrow();
   });
 
-  it("addService composes a service level middleware function that gets called when you call the handler.", () => {
+  xit("addService composes a service level middleware function that gets called when you call the handler.", () => {
     const server = new Server();
     const mockMiddleware = jest.fn(function() {});
     server.addService(
@@ -61,6 +61,19 @@ describe("Unit tests for Server", () => {
       },
       mockMiddleware
     );
+    const fakeObject = {};
+    console.log(
+      server.handlers[Object.keys(server.handlers)[0]].func(fakeObject)
+    );
+    expect(mockMiddleware.mock.calls.length).toBe(1);
+  });
+
+  it("addService composes a method level middleware that is called on context object when handler is called.", () => {
+    const server = new Server();
+    const mockMiddleware = jest.fn();
+    server.addService(testService, {
+      unaryCall: [mockMiddleware]
+    });
     const fakeObject = {};
     console.log(
       server.handlers[Object.keys(server.handlers)[0]].func(fakeObject)
