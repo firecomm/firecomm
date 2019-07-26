@@ -25,7 +25,7 @@ server.addService(
   }
 );
 
-// console.log({ server });
+console.log({ server });
 // console.log("server proto", server.__proto__);
 // console.log(
 //   "proto of server handler",

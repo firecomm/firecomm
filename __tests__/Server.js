@@ -1,35 +1,52 @@
-const {Server} = require('../index');
-const grpc = require('grpc');
+const grpc = require("grpc");
+const path = require("path");
+const protoLoader = require("@grpc/proto-loader");
 
-// Mock the grpc server implementation
+const { Server } = require("../index");
+var PROTO_PATH = path.join(__dirname, "./test.proto");
 
-// const MockServer = require('./mocks/Server')
-// jest.mock('./mocks/Server.js');
+var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
+  keepCase: true,
+  longs: String,
+  enums: String,
+  defaults: true,
+  oneofs: true
+});
 
-// console.log(new MockServer)
+var protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
+// console.log(Object.keys(protoDescriptor));
+var testProto = protoDescriptor.test;
 
-// console.log({MockServer});
+const testService = testProto.Test;
 
-// console.log(MockServer.mockImplementation());
-
-describe('Unit tests for Server', () => {
-
-  it('Constructor extends the grpc server class.', () => {
+describe("Unit tests for Server", () => {
+  xit("Constructor extends the grpc server class.", () => {
     const server = new Server();
     expect(server instanceof grpc.Server).toBeTruthy();
   });
 
+  xit("Server bind throws an error when you pass in an object as a port.", () => {
+    expect(() => {
+      const server = new Server();
+      server.bind({ port: "0.0.0.0:3000" });
+    }).toThrow();
+  });
 
-  it('Server bind throws an error when you pass in an object as a port.',
-     () => {
-       expect(() => {
-         const server = new Server();
-         server.bind({port: '0.0.0.0:3000'});
-       }).toThrow();
-     });
+  xit("addService composes and adds an async function.", () => {
+    const server = new Server();
+    server.addService(testService, {
+      unaryCall: jest.fn(function() {})
+    });
+    expect(
+      server.handlers[Object.keys(server.handlers)[0]].func.constructor.name
+    ).toBe("AsyncFunction");
+  });
 
-  xit('Add service connects services to the server.',
-      () => {
+  xit("addService throws an error when you add a handlername not included in the service.", () => {});
 
-      });
+  xit("addService adds the right amount of functions.", () => {});
+
+  xit("addService composes a service level middleware function that gets called when you call the handler.", () => {});
+
+  xit("addService turns a unary service into a handler.", () => {});
 });
