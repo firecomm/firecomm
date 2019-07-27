@@ -3,7 +3,7 @@ const mockDuplexStream = {
   on: () => {},
   write: () => {},
 };
-const mockDuplex = generateDuplexCall(mockServerReadableStream);
+const mockDuplex = generateDuplexCall(mockDuplexStream);
 
 describe('Unit test for generating Duplex Call', () => {
   
