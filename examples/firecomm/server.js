@@ -15,7 +15,9 @@ const {
 } = require("./methodHandlers");
 const waitFor = require("./middleware");
 
-const server = new firecomm.Server();
+const server = new firecomm.Server(err => {
+  console.log("error from error handler", err);
+});
 
 server.addService(
   package.RouteGuide,
