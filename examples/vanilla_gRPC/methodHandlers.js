@@ -1,6 +1,7 @@
 const grpc = require("grpc");
 
 function unaryChat(call, callback) {
+  // throw new Error("this is an error");
   const meta = new grpc.Metadata();
   meta.set("trailertest", "trailers");
   // console.log({ meta });

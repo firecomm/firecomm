@@ -22,6 +22,11 @@ server.addService(
   { unaryChat: [waitFor, unaryChat], serverStream, clientStream, bidiChat },
   context => {
     console.log("inside of service level middleware");
+  },
+  (err, call) => {
+    console.log("error from error handler:", err);
+    console.log("call in error:", call);
+    call.send({ message: "BULLDOZE THROUGH ERRORS" });
   }
 );
 
