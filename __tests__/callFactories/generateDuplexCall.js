@@ -1,10 +1,28 @@
 const generateDuplexCall = require('../../lib/callFactories/generateDuplex')
-const {Duplex} = require('stream');
+const mockDuplexStream = {
+  on: () => {},
+  write: () => {},
+};
+const mockDuplex = generateDuplexCall(mockDuplexStream);
 
-const fakeCall = Duplex;
-const fakeCallback = () => {};
 describe('Unit test for generating Duplex Call', () => {
-  test('Duplex Call cannot take a callback', () => {
-    expect(() => generateDuplexCall(fakeCall, fakeCallback)).toThrow();
+  
+  describe('Duplex should have methods', () => {
+
+    test('Duplex Call must have throw method', () => {
+      expect(typeof mockDuplex.throw === 'function').toBe(true);
+    })
+
+    test('Duplex Call must have sendMeta method', () => {
+      expect(typeof mockDuplex.sendMeta === 'function').toBe(true);
+    })
+
+    test('Duplex Call must have on method', () => {
+      expect(typeof mockDuplex.on === 'function').toBe(true);
+    })
+
+    test('Duplex Call must have write method', () => {
+      expect(typeof mockDuplex.write === 'function').toBe(true);
+    })
   })
 })
