@@ -68,7 +68,7 @@ describe("Unit tests for Server", () => {
     expect(mockMiddleware.mock.calls.length).toBe(1);
   });
 
-  it("addService composes a method level middleware that is called on context object when handler is called.", () => {
+  xit("addService composes a method level middleware that is called on context object when handler is called.", () => {
     const server = new Server();
     const mockMiddleware = jest.fn();
     server.addService(testService, {
@@ -79,5 +79,23 @@ describe("Unit tests for Server", () => {
       server.handlers[Object.keys(server.handlers)[0]].func(fakeObject)
     );
     expect(mockMiddleware.mock.calls.length).toBe(1);
+  });
+});
+
+describe("Uncaught Error Handling.", () => {
+  xit("Server level error handling should receive error and context object", () => {
+    const mockErrorHandler = jest.fn();
+    const server = new Server(mockErrorHandler);
+    const mockMiddleware = jest.fn((err, call) => {
+      throw new Error("error from mock middleware");
+    });
+    server.addService(testService, {
+      unaryCall: [mockMiddleware]
+    });
+    const fakeObject = {};
+    server.handlers[Object.keys(server.handlers)[0]].func(fakeObject);
+    expect(mockErrorHandler.mock.calls.length).toBe(1);
+    expect(mockErrorHandler.mock.calls[0][0]).toBeInstanceOf(Error);
+    expect(typeof mockErrorHandler.mock.calls[0][1] === "object").toBeTruthy();
   });
 });
