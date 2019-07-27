@@ -1,0 +1,18 @@
+// Very Helpful resources : 
+// https://developers.google.com/protocol-buffers/docs/proto3
+
+syntax = "proto3";
+
+package routeguide;
+
+service RouteGuide {
+  rpc UnaryChat(Chat) returns (Chat) {}
+
+  rpc ServerStream(Chat) returns (stream Chat) {}
+
+  rpc ClientStream(stream Chat) returns (Chat) {}
+  
+  rpc BidiChat(stream Chat) returns (stream Chat) {}
+}
+
+message Chat { string message = 1; }
