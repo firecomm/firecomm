@@ -2,10 +2,14 @@ const grpc = require("grpc");
 
 function unaryChat(call, callback) {
   const meta = new grpc.Metadata();
+  meta.set("trailertest", "trailers");
+  // console.log({ meta });
   const { request } = call;
   console.log(request);
   const response = { message: request.message + " World" };
-  callback(null, response, meta);
+  let err = new Error("hello");
+  err.metadata = meta;
+  callback(err, response, meta);
 }
 
 function serverStream(call) {
