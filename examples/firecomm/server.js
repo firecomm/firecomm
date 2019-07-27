@@ -15,15 +15,18 @@ const {
 } = require("./methodHandlers");
 const waitFor = require("./middleware");
 
-const server = new firecomm.Server(err => {
-  console.log("error from error handler", err);
-});
+const server = new firecomm.Server();
 
 server.addService(
   package.RouteGuide,
   { unaryChat: [waitFor, unaryChat], serverStream, clientStream, bidiChat },
   context => {
     console.log("inside of service level middleware");
+  },
+  (err, call) => {
+    console.log("error from error handler:", err);
+    console.log("call in error:", call);
+    call.send({ message: "BULLDOZE THROUGH ERRORS" });
   }
 );
 
