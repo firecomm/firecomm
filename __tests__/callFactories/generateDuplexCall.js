@@ -14,25 +14,25 @@ describe("Unit test for generating Duplex Call", () => {
   });
 
   describe("Duplex should have methods", () => {
-    xtest("Duplex Call must have throw method", () => {
+    test("Duplex Call must have throw method", () => {
       expect(typeof mockDuplex.throw === "function").toBe(true);
     });
 
-    xtest("Duplex Call must have sendMeta method", () => {
+    test("Duplex Call must have sendMeta method", () => {
       expect(typeof mockDuplex.sendMeta === "function").toBe(true);
     });
 
-    xtest("Duplex Call must have on method", () => {
+    test("Duplex Call must have on method", () => {
       expect(typeof mockDuplex.on === "function").toBe(true);
     });
 
-    xtest("Duplex Call must have write method", () => {
+    test("Duplex Call must have write method", () => {
       expect(typeof mockDuplex.write === "function").toBe(true);
     });
   });
 
   describe("Duplex has setStatus and sends trailers with errors.", () => {
-    xit(".setStatus modifies the trailerObject Property", () => {
+    it(".setStatus modifies the trailerObject Property", () => {
       const mockDuplex = generateDuplexCall(mockDuplexStream);
       mockDuplex.setStatus({ test: "test" });
       expect(mockDuplex.trailerObject).toEqual({ test: "test" });
