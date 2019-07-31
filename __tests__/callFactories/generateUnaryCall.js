@@ -1,13 +1,19 @@
 const generateUnaryCall = require('../../lib/callFactories/generateUnaryCall');
 
-const fakeCallBack = () => {};
-const fakeUnaryCall = {};
 const mockUnary = generateUnaryCall(fakeUnaryCall, fakeCallBack);
 describe('Unit tests for Unary Call', () => {
   describe('Unary should have properties', () => {
 
     test('Unary Call must have metaData property', () => {
       expect(mockUnary.hasOwnProperty('metaData')).toBe(true);
+    })
+
+    test('Unary Call must have metadata property', () => {
+      expect(mockUnary.hasOwnProperty('metadata')).toBe(true);
+    })
+
+    test('Unary Call must have body property', () => {
+      expect(mockUnary.hasOwnProperty('body')).toBe(true);
     })
 
     test('Unary Call must have err property', () => {
