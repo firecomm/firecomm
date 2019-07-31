@@ -1,5 +1,7 @@
 const generateUnaryCall = require('../../lib/callFactories/generateUnaryCall');
 
+const fakeCallBack = () => {};
+const fakeUnaryCall = {request: 'fakeMessage', metadata: 'fakeMetadata'};
 const mockUnary = generateUnaryCall(fakeUnaryCall, fakeCallBack);
 describe('Unit tests for Unary Call', () => {
   describe('Unary should have properties', () => {
@@ -42,5 +44,17 @@ describe('Unit tests for Unary Call', () => {
     test('Unary Call must have send method', () => {
       expect(typeof mockUnary.send === 'function').toBe(true);
     })
+  })
+
+  describe('Unary should receive message as body', () => {
+
+    test('Unary should receive message as body', () => {
+      expect(mockUnary.body === 'fakeMessage').toBe(true);
+    })
+
+    test('Unary should receive metadata as metadata', () => {
+      expect(mockUnary.metadata === 'fakeMetadata').toBe(true);
+    })
+
   })
 })

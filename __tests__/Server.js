@@ -20,19 +20,19 @@ var testProto = protoDescriptor.test;
 const testService = testProto.Test;
 
 describe("Unit tests for Server", () => {
-  xit("Constructor extends the grpc server class.", () => {
+  it("Constructor extends the grpc server class.", () => {
     const server = new Server();
     expect(server instanceof grpc.Server).toBeTruthy();
   });
 
-  xit("Server bind throws an error when you pass in an object as a port.", () => {
+  it("Server bind throws an error when you pass in an object as a port.", () => {
     expect(() => {
       const server = new Server();
       server.bind({ port: "0.0.0.0:3000" });
     }).toThrow();
   });
 
-  xit("addService composes and adds an async function.", () => {
+  it("addService composes and adds an async function.", () => {
     const server = new Server();
     server.addService(testService, {
       unaryCall: jest.fn(function() {})
@@ -42,7 +42,7 @@ describe("Unit tests for Server", () => {
     ).toBe("AsyncFunction");
   });
 
-  xit("addService throws an error when you add a handlername not included in the service.", () => {
+  it("addService throws an error when you add a handlername not included in the service.", () => {
     const server = new Server();
     expect(() => {
       server.addService(testService, {
@@ -51,7 +51,7 @@ describe("Unit tests for Server", () => {
     }).toThrow();
   });
 
-  xit("addService composes a service level middleware function that gets called when you call the handler.", () => {
+  it("addService composes a service level middleware function that gets called when you call the handler.", () => {
     const server = new Server();
     const mockMiddleware = jest.fn(function() {});
     server.addService(
