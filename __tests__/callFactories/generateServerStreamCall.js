@@ -1,5 +1,5 @@
 const generateServerStreamCall = require('../../lib/callFactories/generateServerStreamCall')
-const mockServerReadableStream = {write: () => {}, request: fakeMessage, metadata: 'fakeMetadata'};
+const mockServerReadableStream = {write: () => {}, request: 'fakeMessage', metadata: 'fakeMetadata'};
 const mockServerWritable = generateServerStreamCall(mockServerReadableStream);
 
 describe('Unit tests for generating Server Stream Call', () => {
@@ -15,18 +15,6 @@ describe('Unit tests for generating Server Stream Call', () => {
 
     test('Server Stream Call must have body property', () => {
       expect(mockServerWritable.hasOwnProperty('body')).toBe(true);
-    })
-
-    test('Server Stream Call must have req property', () => {
-      expect(mockServerWritable.hasOwnProperty('req')).toBe(true);
-    })
-
-    test('Server Stream Call req must have meta property', () => {
-      expect(mockServerWritable.req.hasOwnProperty('meta')).toBe(true);
-    })
-
-    test('Server Stream Call req must have data property', () => {
-      expect(mockServerWritable.req.hasOwnProperty('data')).toBe(true);
     })
   });
 
@@ -48,11 +36,11 @@ describe('Unit tests for generating Server Stream Call', () => {
   describe('Server Stream Call should receive message as body', () => {
 
     test('Server Stream Call should receive message as body', () => {
-      expect(mockUnary.body === 'fakeMessage').toBe(true);
+      expect(mockServerWritable.body === 'fakeMessage').toBe(true);
     })
 
     test('Server Stream Call should receive metadata as metadata', () => {
-      expect(mockUnary.metadata === 'fakeMetadata').toBe(true);
+      expect(mockServerWritable.metadata === 'fakeMetadata').toBe(true);
     })
 
   })
