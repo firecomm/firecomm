@@ -43,7 +43,7 @@ console.log({ server });
 // {private_key: (__dirname + '/server.crt'), certificate: (__dirname +
 // '/server.key')}
 server.bind("0.0.0.0:3000", {
-  before_private_key: __dirname + "/server.key",
+  privateKey: __dirname + "/server.key",
   certificate: __dirname + "/server.crt"
 });
 // console.log({server})
