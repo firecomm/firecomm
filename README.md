@@ -1,5 +1,5 @@
 # FIRECOMM
-> 1.0.0.alpha release
+> 1.0.2.alpha release
 
 Framework extending gRPC-Node. Standardized syntax for transpiling protoBufs into Node.js, creating servers, clients, and managing gRPC channels in distributed systems.
 
