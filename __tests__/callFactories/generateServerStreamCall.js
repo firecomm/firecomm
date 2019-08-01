@@ -1,6 +1,6 @@
-const generateServerStreamCall = require("../../lib/callFactories/generateServerStreamCall");
+const generateServerStreamCall = require('../../lib/callFactories/generateServerStreamCall')
 const mockEmit = jest.fn();
-const mockServerWritableStream = { write: () => {}, emit: mockEmit };
+const mockServerWritableStream = { write: () => {}, emit: mockEmit, request: 'fakeMessage', metadata: 'fakeMetadata'};
 const mockServerWritable = generateServerStreamCall(mockServerWritableStream);
 
 describe("Unit tests for generating Server Stream Call", () => {
@@ -9,17 +9,13 @@ describe("Unit tests for generating Server Stream Call", () => {
       expect(mockServerWritable.hasOwnProperty("metaData")).toBe(true);
     });
 
-    test("Server Stream Call must have req property", () => {
-      expect(mockServerWritable.hasOwnProperty("req")).toBe(true);
-    });
+    test('Server Stream Call must have metadata property', () => {
+      expect(mockServerWritable.hasOwnProperty('metadata')).toBe(true);
+    })
 
-    test("Server Stream Call req must have meta property", () => {
-      expect(mockServerWritable.req.hasOwnProperty("meta")).toBe(true);
-    });
-
-    test("Server Stream Call req must have data property", () => {
-      expect(mockServerWritable.req.hasOwnProperty("data")).toBe(true);
-    });
+    test('Server Stream Call must have body property', () => {
+      expect(mockServerWritable.hasOwnProperty('body')).toBe(true);
+    })
   });
 
   describe("Server Stream should have methods", () => {
@@ -48,6 +44,24 @@ describe("Unit tests for generating Server Stream Call", () => {
       expect(mockServerWritable.trailerObject).toEqual({ test: "test" });
     });
 
+    test('Server Stream Call must have write method', () => {
+      expect(typeof mockServerWritable.write === 'function').toBe(true);
+    })
+  })
+
+  describe('Server Stream Call should receive message as body', () => {
+
+    test('Server Stream Call should receive message as body', () => {
+      expect(mockServerWritable.body === 'fakeMessage').toBe(true);
+    })
+
+    test('Server Stream Call should receive metadata as metadata', () => {
+      expect(mockServerWritable.metadata === 'fakeMetadata').toBe(true);
+    })
+
+  })
+})
+describe('Server Stream Call should emit error properly', () => {
     it("Emit error now sends grpc.Metadata Object with error property.", () => {
       const mockServerWritable = generateServerStreamCall(
         mockServerWritableStream
@@ -63,4 +77,3 @@ describe("Unit tests for generating Server Stream Call", () => {
       });
     });
   });
-});
