@@ -1,19 +1,19 @@
-const grpc = require('grpc');
+const grpc = require("grpc");
 
 function unaryChat(ctx) {
-  ctx.setStatus({'trailer': 'value'});
+  // ctx.setStatus({'trailer': 'value'});
   // ctx.throw(new Error('custom error message'));
   console.log(ctx.metadata);
   console.log(ctx.body);
   // ctx.setTrailer({'hello': 'trailer'})
-  // // ctx.throw({err: 'bad'})
   // ctx.setMeta({'hello': 'world'})
-  ctx.send({message: 'what\'s up'});
-  }
+  // ctx.send({message: 'what\'s up'});
+  throw new Error("uncaught error");
+}
 
 function serverStream(context) {
-  context.write({message: ' World'});
-};
+  context.write({ message: " World" });
+}
 
 function clientStream(context) {
   // console.log('serverStream context: ', context);
@@ -31,10 +31,10 @@ function bidiChat(context) {
     // console.log('data:', data);
     context.write({message: data.message + ' World'});
   });
-  context.throw(new Error('error'));
+  context.throw(new Error("error"));
   setTimeout(() => {
     context.end();
-  }, 3000)
+  }, 3000);
 }
 
 module.exports = {

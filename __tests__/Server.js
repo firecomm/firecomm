@@ -62,9 +62,7 @@ describe("Unit tests for Server", () => {
       mockMiddleware
     );
     const fakeObject = {};
-    console.log(
-      server.handlers[Object.keys(server.handlers)[0]].func(fakeObject)
-    );
+    server.handlers[Object.keys(server.handlers)[0]].func(fakeObject);
     expect(mockMiddleware.mock.calls.length).toBe(1);
   });
 
@@ -75,9 +73,54 @@ describe("Unit tests for Server", () => {
       unaryCall: [mockMiddleware]
     });
     const fakeObject = {};
-    console.log(
-      server.handlers[Object.keys(server.handlers)[0]].func(fakeObject)
-    );
+    server.handlers[Object.keys(server.handlers)[0]].func(fakeObject);
     expect(mockMiddleware.mock.calls.length).toBe(1);
+  });
+});
+
+describe("Unit tests for bind.", () => {
+  it("Bind should support a single port insecurely if no config supplied.", () => {
+    const server = new Server();
+    const boundPorts = server.bind("0.0.0.0:3000");
+    expect(boundPorts[0]).toBeGreaterThanOrEqual(0);
+  });
+});
+
+describe("Uncaught Error Handling.", () => {
+  it("Server level error handling should receive error and context object", () => {
+    const mockErrorHandler = jest.fn();
+    const server = new Server(mockErrorHandler);
+    const mockMiddleware = jest.fn((err, call) => {
+      throw new Error("error from mock middleware");
+    });
+    server.addService(testService, {
+      unaryCall: [mockMiddleware]
+    });
+    const fakeObject = {};
+    server.handlers[Object.keys(server.handlers)[0]].func(fakeObject);
+    expect(mockErrorHandler.mock.calls.length).toBe(1);
+    expect(mockErrorHandler.mock.calls[0][0]).toBeInstanceOf(Error);
+    expect(typeof mockErrorHandler.mock.calls[0][1] === "object").toBeTruthy();
+  });
+
+  it("Service level error handlers overwrite server level error handlers", () => {
+    const mockErrorHandler = jest.fn();
+    const server = new Server(jest.fn());
+    const mockMiddleware = jest.fn((err, call) => {
+      throw new Error("error from mock middleware");
+    });
+    server.addService(
+      testService,
+      {
+        unaryCall: [mockMiddleware]
+      },
+      null,
+      mockErrorHandler
+    );
+    const fakeObject = {};
+    server.handlers[Object.keys(server.handlers)[0]].func(fakeObject);
+    expect(mockErrorHandler.mock.calls.length).toBe(1);
+    expect(mockErrorHandler.mock.calls[0][0]).toBeInstanceOf(Error);
+    expect(typeof mockErrorHandler.mock.calls[0][1] === "object").toBeTruthy();
   });
 });
