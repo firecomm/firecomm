@@ -37,7 +37,7 @@ const firstChat = {
 
 const { log: c } = console;
 
-// stub.unaryChat(firstChat).then(res => c(res)).catch(err => c(err));
+stub.unaryChat(firstChat).then(res => console.log(res)).catch(err => console.log(err));
 
 const testUnaryChat = () => {
   // console.log(stub.getChannel().getConnectivityState(true))
@@ -58,7 +58,7 @@ const testClientStream = () => {
   clientStream.end();
 };
 
-testClientStream();
+// testClientStream();
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);
@@ -68,7 +68,7 @@ const testServerStream = () => {
     console.log("data::", data), " ///////////// ";
   });
 };
-testServerStream();
+// testServerStream();
 
 const testBidiChat = () => {
   console.log({ stub });
