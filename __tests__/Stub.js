@@ -105,7 +105,7 @@ describe("Tests for unaryCall", () => {
   mockHandler.requestStream = false;
   mockHandler.responseStream = false;
 
-  beforeAll(() => {
+  beforeEach(() => {
     mockHandler.mockClear();
   });
 
@@ -127,7 +127,25 @@ describe("Tests for unaryCall", () => {
       .then(res => {})
       .catch(err => {});
     expect(result).toBeInstanceOf(Promise);
-    console.log(mockHandler.mock.calls);
+  });
+
+  it("Works on interceptor call.", () => {
+    class mockServiceDef {
+      constructor(port, credentials) {}
+      HandlerName(...args) {
+        mockHandler(...args);
+      }
+    }
+    mockServiceDef.service = {
+      HandlerName: mockHandler
+    };
+
+    const mockPort = "0.0.0.0:3000";
+    const stub = Stub(mockServiceDef, mockPort);
+    const result = stub
+      .handlerName({ message: "hello" }, [() => {}])
+      .then(res => {})
+      .catch(err => {});
     expect(mockHandler.mock.calls.length).toBe(1);
   });
 });
