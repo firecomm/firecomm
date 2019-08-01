@@ -171,4 +171,3 @@ const duplex =
   someFunctionality(request));
 ```
 `CLIENT_STREAM`, `SERVER_STREAM`, and `DUPLEX` ***return** a stream **object***
->>>>>>> dev
