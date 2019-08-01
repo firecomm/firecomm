@@ -78,6 +78,14 @@ describe("Unit tests for Server", () => {
   });
 });
 
+describe("Unit tests for bind.", () => {
+  it("Bind should support a single port insecurely if no config supplied.", () => {
+    const server = new Server();
+    const boundPorts = server.bind("0.0.0.0:3000");
+    expect(boundPorts[0]).toBeGreaterThanOrEqual(0);
+  });
+});
+
 describe("Uncaught Error Handling.", () => {
   it("Server level error handling should receive error and context object", () => {
     const mockErrorHandler = jest.fn();
