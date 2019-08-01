@@ -37,7 +37,10 @@ const firstChat = {
 
 const { log: c } = console;
 
-stub.unaryChat(firstChat).then(res => console.log(res)).catch(err => console.log(err));
+stub
+  .unaryChat(firstChat)
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
 
 const testUnaryChat = () => {
   // console.log(stub.getChannel().getConnectivityState(true))
@@ -45,9 +48,9 @@ const testUnaryChat = () => {
   return stub.unaryChat(firstChat, { interceptors: [interceptorProvider] });
 };
 
-testUnaryChat()
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// testUnaryChat()
+//   .then(data => console.log(data))
+//   .catch(err => console.error(err));
 
 const testClientStream = () => {
   const clientStream = stub.clientStream((err, res) => {
