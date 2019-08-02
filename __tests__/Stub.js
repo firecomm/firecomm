@@ -5,7 +5,7 @@ const grpc = require("grpc");
 
 // successfully promisifies a unary
 
-xdescribe("Unit tests for Stub", () => {
+describe("Unit tests for Stub", () => {
   it("Should extend a service definition", () => {
     class mockServiceDef {
       constructor(port, credentials) {}
