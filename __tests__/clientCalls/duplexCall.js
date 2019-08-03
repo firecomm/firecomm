@@ -16,17 +16,21 @@ describe("Tests for duplexCall.", () => {
 
   it("Interceptor array in second position gets called in the right place.", () => {
     duplexCall(that, "methodName", { meta: "value" }, [() => {}]);
-    expect(typeof mockMethod.mock.calls[0][0]).toBe("object");
     expect(
-      typeof mockMethod.mock.calls[0][1].hasOwnProperty("intercpetors")
+      typeof mockMethod.mock.calls[0][0].hasOwnProperty("_internal_repr")
+    ).toBeTruthy();
+    expect(
+      mockMethod.mock.calls[0][1].hasOwnProperty("interceptors")
     ).toBeTruthy();
   });
 
   it("Meta object in the second position gets called in the right place.", () => {
     duplexCall(that, "methodName", [() => {}], { meta: "value" });
-    expect(typeof mockMethod.mock.calls[0][1]).toBe("object");
     expect(
-      typeof mockMethod.mock.calls[0][0].hasOwnProperty("interceptors")
+      typeof mockMethod.mock.calls[0][0].hasOwnProperty("_internal_repr")
+    ).toBeTruthy();
+    expect(
+      mockMethod.mock.calls[0][1].hasOwnProperty("interceptors")
     ).toBeTruthy();
   });
 });

@@ -22,7 +22,9 @@ describe("Tests for clientStreamCall.", () => {
       [() => {}],
       () => {}
     );
-    expect(typeof mockMethod.mock.calls[0][0]).toBe("object");
+    expect(
+      typeof mockMethod.mock.calls[0][0].hasOwnProperty("_internal_repr")
+    ).toBeTruthy();
     expect(
       typeof mockMethod.mock.calls[0][1].hasOwnProperty("intercpetors")
     ).toBeTruthy();
@@ -42,9 +44,11 @@ describe("Tests for clientStreamCall.", () => {
       { meta: "value" },
       () => {}
     );
-    expect(typeof mockMethod.mock.calls[0][1]).toBe("object");
     expect(
-      typeof mockMethod.mock.calls[0][0].hasOwnProperty("interceptors")
+      typeof mockMethod.mock.calls[0][0].hasOwnProperty("_internal_repr")
+    ).toBeTruthy();
+    expect(
+      mockMethod.mock.calls[0][1].hasOwnProperty("interceptors")
     ).toBeTruthy();
   });
 });
