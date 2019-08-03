@@ -73,7 +73,7 @@ describe("Unit tests for Stub", () => {
 
     const mockPort = "0.0.0.0:3000";
     const stub = Stub(mockServiceDef, mockPort);
-    stub.handlerName();
+    stub.handlerName(() => {});
     expect(jestMock.mock.calls.length).toBe(1);
   });
 
@@ -95,7 +95,7 @@ describe("Unit tests for Stub", () => {
 
     const mockPort = "0.0.0.0:3000";
     const stub = Stub(mockServiceDef, mockPort);
-    stub.handlerName();
+    stub.handlerName({ message: "fakemessage" });
     expect(jestMock.mock.calls.length).toBe(1);
   });
 });
