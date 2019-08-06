@@ -35,10 +35,12 @@ const firstChat = {
 
 const { log: c } = console;
 
-const unaryChat = stub.unaryChat({meta: 'data'}, [interceptorProvider]);
-unaryChat.on(res => console.log(res));
-unaryChat.catch(err => console.log(err));
-unaryChat.send(firstChat);
+stub.unaryChat({meta: 'data'}, [interceptorProvider])
+.send(firstChat)
+.on(res => console.log(res))
+.catch(err => console.log(err))
+// unaryChat.on(res => console.log(res));
+// unaryChat.catch(err => console.log(err));
 
 // testUnaryChat()
 //   .then(data => console.log(data))

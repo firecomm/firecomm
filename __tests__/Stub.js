@@ -109,26 +109,6 @@ describe("Tests for unaryCall", () => {
     mockHandler.mockClear();
   });
 
-  it("Promisifies Unary.", () => {
-    class mockServiceDef {
-      constructor(port, credentials) {}
-      HandlerName(...args) {
-        mockHandler(...args);
-      }
-    }
-    mockServiceDef.service = {
-      HandlerName: mockHandler
-    };
-
-    const mockPort = "0.0.0.0:3000";
-    const stub = Stub(mockServiceDef, mockPort);
-    const result = stub
-      .handlerName({ message: "hello" })
-      .then(res => {})
-      .catch(err => {});
-    expect(result).toBeInstanceOf(Promise);
-  });
-
   it("Works on interceptor call.", () => {
     class mockServiceDef {
       constructor(port, credentials) {}
@@ -143,8 +123,9 @@ describe("Tests for unaryCall", () => {
     const mockPort = "0.0.0.0:3000";
     const stub = Stub(mockServiceDef, mockPort);
     const result = stub
-      .handlerName({ message: "hello" }, [() => {}])
-      .then(res => {})
+      .handlerName({ meta: "data" }, [() => {}])
+      .send({ message: "hello" })
+      .on(res => {})
       .catch(err => {});
     expect(mockHandler.mock.calls.length).toBe(1);
   });
