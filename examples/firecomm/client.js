@@ -46,25 +46,33 @@ stub.unaryChat({meta: 'data'}, [interceptorProvider])
 //   .then(data => console.log(data))
 //   .catch(err => console.error(err));
 
-const testClientStream = () => {
-  const clientStream = stub.clientStream((err, res) => {
-    if (err) console.log(err);
-    console.log({ res });
-  });
-  clientStream.write(firstChat);
-  clientStream.end();
-};
+stub.serverStream({meta: 'data'}, [interceptorProvider])
+// .send(firstChat)
+.on(res => console.log(res))
+.send({message: 'please'})
+.on(({message}) => console.log(message))
+// .catch(err => console.log(err))
+.catch(err => console.error(err))
+
+// const testClientStream = () => {
+//   const clientStream = stub.clientStream((err, res) => {
+//     if (err) console.log(err);
+//     console.log({ res });
+//   });
+//   clientStream.write(firstChat);
+//   clientStream.end();
+// };
 
 // testClientStream();
 
-const testServerStream = () => {
-  const serverStream = stub.serverStream(firstChat);
-  // const serverStream = stub.serverStream();
-  // serverStream.write({path: 'firstChat'});
-  serverStream.on("data", data => {
-    console.log("data::", data), " ///////////// ";
-  });
-};
+// const testServerStream = () => {
+//   const serverStream = stub.serverStream(firstChat);
+//   // const serverStream = stub.serverStream();
+//   // serverStream.write({path: 'firstChat'});
+//   serverStream.on("data", data => {
+//     console.log("data::", data), " ///////////// ";
+//   });
+// };
 // testServerStream();
 
 const testBidiChat = () => {

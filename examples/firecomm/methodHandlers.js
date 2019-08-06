@@ -13,7 +13,12 @@ function unaryChat(ctx) {
 }
 
 function serverStream(context) {
-  context.write({ message: " World" });
+  console.log(context);
+  let count = 0;
+  setInterval(() => {
+    count += 1;
+    context.write({ message: " World" + count })
+  }, 1000)
 }
 
 function clientStream(context) {
