@@ -8,7 +8,8 @@ function unaryChat(ctx) {
   // ctx.setTrailer({'hello': 'trailer'})
   // ctx.setMeta({'hello': 'world'})
   // ctx.send({message: 'what\'s up'});
-  throw new Error("uncaught error");
+  // throw new Error("uncaught error");
+  ctx.send({message: 'it works'})
 }
 
 function serverStream(context) {
