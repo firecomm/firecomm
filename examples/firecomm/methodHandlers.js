@@ -3,23 +3,31 @@ const grpc = require("grpc");
 function unaryChat(ctx) {
   // ctx.setStatus({'trailer': 'value'});
   // ctx.throw(new Error('custom error message'));
-  console.log(ctx.metadata);
-  console.log(ctx.body);
+  // console.log(ctx.metadata);
+  // console.log(ctx.body);
   // ctx.setTrailer({'hello': 'trailer'})
   // ctx.setMeta({'hello': 'world'})
   // ctx.send({message: 'what\'s up'});
-  throw new Error("uncaught error");
+  // throw new Error("uncaught error");
+  ctx.send({message: 'it works'})
 }
 
 function serverStream(context) {
-  context.write({ message: " World" });
+  // console.log(context);
+  let count = 0;
+  setInterval(() => {
+    count += 1;
+    context.write({ message: " World" + count })
+  }, 1000)
 }
 
 function clientStream(context) {
+  // console.log(context.__proto__);
   // console.log('serverStream context: ', context);
+  // console.log(context.metadata, context.metaData);
   context.on('data', data => {console.log(data)});
   context.send({message: 'world'})
-  }
+}
 
 
 function bidiChat(context) {
@@ -40,6 +48,6 @@ function bidiChat(context) {
 module.exports = {
   unaryChat,
   bidiChat,
+  clientStream,
   serverStream,
-  clientStream
 };
