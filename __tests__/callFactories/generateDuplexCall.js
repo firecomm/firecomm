@@ -15,7 +15,7 @@ describe("Unit test for generating Duplex Call", () => {
 
   describe("Duplex should have properties", () => {
     test("Duplex Call must have head property", () => {
-      expect(mockServerReadable.hasOwnProperty("head")).toBe(true);
+      expect(mockDuplex.hasOwnProperty("head")).toBe(true);
     });
   });
 
