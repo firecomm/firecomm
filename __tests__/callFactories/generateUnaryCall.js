@@ -1,60 +1,44 @@
-const generateUnaryCall = require('../../lib/callFactories/generateUnaryCall');
+const generateUnaryCall = require("../../lib/callFactories/generateUnaryCall");
 
 const fakeCallBack = () => {};
-const fakeUnaryCall = {request: 'fakeMessage', metadata: 'fakeMetadata'};
+const fakeUnaryCall = { request: "fakeMessage", metadata: "fakeMetadata" };
 const mockUnary = generateUnaryCall(fakeUnaryCall, fakeCallBack);
-describe('Unit tests for Unary Call', () => {
-  describe('Unary should have properties', () => {
+describe("Unit tests for Unary Call", () => {
+  describe("Unary should have properties", () => {
+    test("Unary Call must have head property", () => {
+      expect(mockUnary.hasOwnProperty("head")).toBe(true);
+    });
 
-    test('Unary Call must have metaData property', () => {
-      expect(mockUnary.hasOwnProperty('metaData')).toBe(true);
-    })
-
-    test('Unary Call must have metadata property', () => {
-      expect(mockUnary.hasOwnProperty('metadata')).toBe(true);
-    })
-
-    test('Unary Call must have body property', () => {
-      expect(mockUnary.hasOwnProperty('body')).toBe(true);
-    })
-
-    test('Unary Call must have err property', () => {
-      expect(mockUnary.hasOwnProperty('err')).toBe(true);
-    })
-
-    test('Unary Call must have trailer property', () => {
-      expect(mockUnary.hasOwnProperty('trailer')).toBe(true);
-    })
+    test("Unary Call must have body property", () => {
+      expect(mockUnary.hasOwnProperty("body")).toBe(true);
+    });
   });
 
-  describe('Unary should have methods', () => {
+  describe("Unary should have methods", () => {
+    test("Unary Call must have throw method", () => {
+      expect(typeof mockUnary.throw === "function").toBe(true);
+    });
 
-    test('Unary Call must have throw method', () => {
-      expect(typeof mockUnary.throw === 'function').toBe(true);
-    })
+    test("Unary Call must have set method", () => {
+      expect(typeof mockUnary.set === "function").toBe(true);
+    });
 
-    test('Unary Call must have setStatus method', () => {
-      expect(typeof mockUnary.setStatus === 'function').toBe(true);
-    })
+    test("Unary Call must have on method", () => {
+      expect(typeof mockUnary.on === "function").toBe(true);
+    });
 
-    test('Unary Call must have setMeta method', () => {
-      expect(typeof mockUnary.setMeta === 'function').toBe(true);
-    })
+    test("Unary Call must have send method", () => {
+      expect(typeof mockUnary.send === "function").toBe(true);
+    });
+  });
 
-    test('Unary Call must have send method', () => {
-      expect(typeof mockUnary.send === 'function').toBe(true);
-    })
-  })
+  describe("Unary should receive message as body", () => {
+    test("Unary should receive message as body", () => {
+      expect(mockUnary.body === "fakeMessage").toBe(true);
+    });
 
-  describe('Unary should receive message as body', () => {
-
-    test('Unary should receive message as body', () => {
-      expect(mockUnary.body === 'fakeMessage').toBe(true);
-    })
-
-    test('Unary should receive metadata as metadata', () => {
-      expect(mockUnary.metadata === 'fakeMetadata').toBe(true);
-    })
-
-  })
-})
+    test("Unary should receive head as metadata", () => {
+      expect(mockUnary.head === "fakeMetadata").toBe(true);
+    });
+  });
+});
