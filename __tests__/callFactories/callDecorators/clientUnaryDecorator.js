@@ -4,13 +4,12 @@ const originalCall = {
 };
 const clientUnaryDecorator = require("../../../lib/callFactories/callDecorators/clientUnaryDecorator");
 
-describe("Client unary decorator tests.", () => {
-  describe("decorator adds the right methods", () => {
-    //adds properties
+describe("tests for client unary decorator", () => {
+  describe("basic Tests for method assignment", () => {
     beforeEach(() => {
-      clientUnaryDecorator(object, originalCall);
+      clientUnaryDecorator(object, () => {});
     });
-    it("Has an on property", () => {
+    it("should have an on", () => {
       expect(object.hasOwnProperty("on")).toBeTruthy();
     });
   });

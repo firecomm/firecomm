@@ -2,16 +2,22 @@ const object = {};
 const originalCall = {
   hello: "hello"
 };
-const clientUnaryDecorator = require("../../../lib/callFactories/callDecorators/clientUnaryDecorator");
+const serverStreamDecorator = require("../../../lib/callFactories/callDecorators/serverStreamDecorator");
 
-describe("Client unary decorator tests.", () => {
+describe("server stream decorator tests.", () => {
   describe("decorator adds the right methods", () => {
     //adds properties
     beforeEach(() => {
-      clientUnaryDecorator(object, originalCall);
+      serverStreamDecorator(object, originalCall);
     });
-    it("Has an on property", () => {
-      expect(object.hasOwnProperty("on")).toBeTruthy();
+    it("Has an set property", () => {
+      expect(object.hasOwnProperty("set")).toBeTruthy();
+    });
+    it("Has an send property", () => {
+      expect(object.hasOwnProperty("send")).toBeTruthy();
+    });
+    it("Has an throw property", () => {
+      expect(object.hasOwnProperty("throw")).toBeTruthy();
     });
   });
 });
