@@ -62,7 +62,13 @@ const testClientStream = () => {
   clientStream.end();
 };
 
-testClientStream();
+stub
+  .clientStream()
+  .on(data => console.log({ data }))
+  .catch(err => console.log({ err }))
+  .send(firstChat);
+
+// testClientStream();
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);

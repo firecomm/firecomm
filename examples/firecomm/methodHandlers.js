@@ -9,7 +9,7 @@ function unaryChat(ctx) {
   // ctx.setMeta({'hello': 'world'})
   // ctx.send({message: 'what\'s up'});
   // throw new Error("uncaught error");
-  ctx.send({message: 'it works'})
+  ctx.send({ message: "it works" });
 }
 
 function serverStream(context) {
@@ -17,27 +17,28 @@ function serverStream(context) {
   let count = 0;
   setInterval(() => {
     count += 1;
-    context.write({ message: " World" + count })
-  }, 1000)
+    context.write({ message: " World" + count });
+  }, 1000);
 }
 
 function clientStream(context) {
   // console.log(context.__proto__);
   // console.log('serverStream context: ', context);
   // console.log(context.metadata, context.metaData);
-  context.on('data', data => {console.log(data)});
-  context.send({message: 'world'})
+  context.on("data", data => {
+    console.log(data);
+    context.send({ message: "world" });
+  });
 }
-
 
 function bidiChat(context) {
   // console.log('context', context);
   // console.log('context keys', Object.keys(context));
   // console.log('context proto', context.__proto__)
 
-  context.on('data', data => {
+  context.on("data", data => {
     // console.log('data:', data);
-    context.write({message: data.message + ' World'});
+    context.write({ message: data.message + " World" });
   });
   context.throw(new Error("error"));
   setTimeout(() => {
@@ -49,5 +50,5 @@ module.exports = {
   unaryChat,
   bidiChat,
   clientStream,
-  serverStream,
+  serverStream
 };
