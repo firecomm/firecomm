@@ -19,7 +19,7 @@ const server = new firecomm.Server();
 
 server.addService(
   package.RouteGuide,
-  { unaryChat: unaryChat, serverStream, clientStream, bidiChat },
+  { unaryChat: unaryChat, serverStream, clientStream, bidiChat }
   // context => {
   //   console.log("inside of service level middleware");
   // },

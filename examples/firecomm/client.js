@@ -8,6 +8,9 @@ const firecomm = require("../../index");
 let certificate = path.join(__dirname, "/server.crt");
 
 const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
+// , {
+//   certificate
+// }
 
 // stub.openChannel('localhost:3000');
 
@@ -35,52 +38,40 @@ const firstChat = {
 
 const { log: c } = console;
 
-// stub.unaryChat({meta: 'data'}, [interceptorProvider])
-// .send(firstChat)
-// .on(res => console.log(res))
-// .catch(err => console.log(err))
-// unaryChat.on(res => console.log(res));
-// unaryChat.catch(err => console.log(err));
+// stub
+//   .unaryChat(firstChat)
+//   .then(res => console.log(res))
+//   .catch(err => console.log(err));
+
+const testUnaryChat = () => {
+  // console.log(stub.getChannel().getConnectivityState(true))
+
+  return stub.unaryChat(firstChat, { interceptors: [interceptorProvider] });
+};
 
 // testUnaryChat()
 //   .then(data => console.log(data))
 //   .catch(err => console.error(err));
 
-// stub.serverStream({meta: 'data'}, [interceptorProvider])
-// // .send(firstChat)
-// .on(res => console.log(res))
-// .send({message: 'please'})
-// .on(({message}) => console.log(message))
-// // .catch(err => console.log(err))
-// .catch(err => console.error(err))
+const testClientStream = () => {
+  const clientStream = stub.clientStream((err, res) => {
+    if (err) console.log(err);
+    console.log({ res });
+  });
+  clientStream.write(firstChat);
+  clientStream.end();
+};
 
-// const clientStream = stub
-//   .clientStream()
-//   .on(res => console.log(res))
-//   .catch(err => console.error(err))
-//   .send({ message: "yolo" });
+testClientStream();
 
-// setInterval(() => {
-//   clientStream.send(firstChat);
-// },1000)
-
-const oldClient = stub.clientStream((err, res) => {
-  if (err) console.error(err);
-  console.log(res);
-});
-
-oldClient.write({ message: "hello" });
-
-// testClientStream();
-
-// const testServerStream = () => {
-//   const serverStream = stub.serverStream(firstChat);
-//   // const serverStream = stub.serverStream();
-//   // serverStream.write({path: 'firstChat'});
-//   serverStream.on("data", data => {
-//     console.log("data::", data), " ///////////// ";
-//   });
-// };
+const testServerStream = () => {
+  const serverStream = stub.serverStream(firstChat);
+  // const serverStream = stub.serverStream();
+  // serverStream.write({path: 'firstChat'});
+  serverStream.on("data", data => {
+    console.log("data::", data), " ///////////// ";
+  });
+};
 // testServerStream();
 
 const testBidiChat = () => {
