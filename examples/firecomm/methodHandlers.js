@@ -3,12 +3,16 @@ const grpc = require("grpc");
 function unaryChat(ctx) {
   // ctx.setStatus({'trailer': 'value'});
   // ctx.throw(new Error('custom error message'));
-  console.log(ctx.metadata);
-  console.log(ctx.body);
+  // console.log(ctx.metadata);
+  // console.log(ctx.body);
+  console.log({ ctx });
+  ctx.on(data => console.log({ data }));
+  ctx.set({ hello: "world" });
+  ctx.send({ message: "message body" });
   // ctx.setTrailer({'hello': 'trailer'})
   // ctx.setMeta({'hello': 'world'})
   // ctx.send({message: 'what\'s up'});
-  throw new Error("uncaught error");
+  // throw new Error("uncaught error");
 }
 
 function serverStream(context) {
@@ -17,19 +21,20 @@ function serverStream(context) {
 
 function clientStream(context) {
   // console.log('serverStream context: ', context);
-  context.on('data', data => {console.log(data)});
-  context.send({message: 'world'})
-  }
-
+  context.on("data", data => {
+    console.log(data);
+  });
+  context.send({ message: "world" });
+}
 
 function bidiChat(context) {
   // console.log('context', context);
   // console.log('context keys', Object.keys(context));
   // console.log('context proto', context.__proto__)
 
-  context.on('data', data => {
+  context.on("data", data => {
     // console.log('data:', data);
-    context.write({message: data.message + ' World'});
+    context.write({ message: data.message + " World" });
   });
   context.throw(new Error("error"));
   setTimeout(() => {
