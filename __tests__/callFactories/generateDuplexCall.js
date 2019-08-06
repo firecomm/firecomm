@@ -37,7 +37,7 @@ describe("Unit test for generating Duplex Call", () => {
     });
   });
 
-  describe("Duplex has setStatus and sends trailers with errors.", () => {
+  xdescribe("Duplex has setStatus and sends trailers with errors.", () => {
     it("Emit error now sends grpc.Metadata Object with error property.", () => {
       const mockDuplex = generateDuplexCall(mockDuplexStream);
       mockDuplex.setStatus({ test: "test" });

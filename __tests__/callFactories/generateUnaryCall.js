@@ -37,7 +37,7 @@ describe("Unit tests for Unary Call", () => {
       expect(mockUnary.body === "fakeMessage").toBe(true);
     });
 
-    test("Unary should receive head as metadata", () => {
+    test("Unary should receive metadata as head", () => {
       expect(mockUnary.head === "fakeMetadata").toBe(true);
     });
   });
