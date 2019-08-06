@@ -3,8 +3,8 @@ const grpc = require("grpc");
 function unaryChat(ctx) {
   // ctx.setStatus({'trailer': 'value'});
   // ctx.throw(new Error('custom error message'));
-  console.log(ctx.metadata);
-  console.log(ctx.body);
+  // console.log(ctx.metadata);
+  // console.log(ctx.body);
   // ctx.setTrailer({'hello': 'trailer'})
   // ctx.setMeta({'hello': 'world'})
   // ctx.send({message: 'what\'s up'});
@@ -13,7 +13,7 @@ function unaryChat(ctx) {
 }
 
 function serverStream(context) {
-  console.log(context);
+  // console.log(context);
   let count = 0;
   setInterval(() => {
     count += 1;

@@ -55,12 +55,14 @@ stub.serverStream({meta: 'data'}, [interceptorProvider])
 .catch(err => console.error(err))
 
 // const testClientStream = () => {
-//   const clientStream = stub.clientStream((err, res) => {
-//     if (err) console.log(err);
-//     console.log({ res });
-//   });
-//   clientStream.write(firstChat);
-//   clientStream.end();
+const clientStream = stub.clientStream({meta: 'data'}, [interceptorProvider])
+.send({message: 'yolo'})
+.on((res) => console.log(res))
+.catch((err) => console.error(err))
+
+setInterval(() => {
+  clientStream.send(firstChat);
+},1000)
 // };
 
 // testClientStream();
