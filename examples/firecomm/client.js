@@ -54,22 +54,20 @@ const { log: c } = console;
 // // .catch(err => console.log(err))
 // .catch(err => console.error(err))
 
-// const testClientStream = () => {
-// const clientStream = stub.clientStream({meta: 'data'}, [interceptorProvider])
-// .on((res) => console.log(res))
-// .catch((err) => console.error(err))
-// .send({message: 'yolo'})
+const clientStream = stub.clientStream({meta: 'data'}, [interceptorProvider])
+.on((res) => console.log(res))
+.catch((err) => console.error(err))
+.send({message: 'yolo'})
 
-// setInterval(() => {
-//   clientStream.send(firstChat);
-// },1000)
-// };
+setInterval(() => {
+  clientStream.send(firstChat);
+},1000)
 
-const oldClient = stub.clientStream((err, res) => { if (err) console.error(err);
-  console.log(res);
-})
+// const oldClient = stub.clientStream((err, res) => { if (err) console.error(err);
+//   console.log(res);
+// })
 
-oldClient.write({message: 'hello'})
+// oldClient.write({message: 'hello'})
 
 // testClientStream();
 
