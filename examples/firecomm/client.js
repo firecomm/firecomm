@@ -35,10 +35,10 @@ const firstChat = {
 
 const { log: c } = console;
 
-stub.unaryChat({meta: 'data'}, [interceptorProvider])
-.send(firstChat)
-.on(res => console.log(res))
-.catch(err => console.log(err))
+// stub.unaryChat({meta: 'data'}, [interceptorProvider])
+// .send(firstChat)
+// .on(res => console.log(res))
+// .catch(err => console.log(err))
 // unaryChat.on(res => console.log(res));
 // unaryChat.catch(err => console.log(err));
 
@@ -46,24 +46,30 @@ stub.unaryChat({meta: 'data'}, [interceptorProvider])
 //   .then(data => console.log(data))
 //   .catch(err => console.error(err));
 
-stub.serverStream({meta: 'data'}, [interceptorProvider])
-// .send(firstChat)
-.on(res => console.log(res))
-.send({message: 'please'})
-.on(({message}) => console.log(message))
-// .catch(err => console.log(err))
-.catch(err => console.error(err))
+// stub.serverStream({meta: 'data'}, [interceptorProvider])
+// // .send(firstChat)
+// .on(res => console.log(res))
+// .send({message: 'please'})
+// .on(({message}) => console.log(message))
+// // .catch(err => console.log(err))
+// .catch(err => console.error(err))
 
 // const testClientStream = () => {
-const clientStream = stub.clientStream({meta: 'data'}, [interceptorProvider])
-.send({message: 'yolo'})
-.on((res) => console.log(res))
-.catch((err) => console.error(err))
+// const clientStream = stub.clientStream({meta: 'data'}, [interceptorProvider])
+// .on((res) => console.log(res))
+// .catch((err) => console.error(err))
+// .send({message: 'yolo'})
 
-setInterval(() => {
-  clientStream.send(firstChat);
-},1000)
+// setInterval(() => {
+//   clientStream.send(firstChat);
+// },1000)
 // };
+
+const oldClient = stub.clientStream((err, res) => { if (err) console.error(err);
+  console.log(res);
+})
+
+oldClient.write({message: 'hello'})
 
 // testClientStream();
 

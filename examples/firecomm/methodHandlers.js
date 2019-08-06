@@ -22,7 +22,9 @@ function serverStream(context) {
 }
 
 function clientStream(context) {
+  // console.log(context.__proto__);
   // console.log('serverStream context: ', context);
+  // console.log(context.metadata, context.metaData);
   context.on('data', data => {console.log(data)});
   context.send({message: 'world'})
   }
@@ -46,6 +48,6 @@ function bidiChat(context) {
 module.exports = {
   unaryChat,
   bidiChat,
+  clientStream,
   serverStream,
-  clientStream
 };
