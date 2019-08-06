@@ -54,7 +54,7 @@ const { log: c } = console;
 // // .catch(err => console.log(err))
 // .catch(err => console.error(err))
 
-const clientStream = stub.clientStream({meta: 'data'}, [interceptorProvider])
+const clientStream = stub.clientStream()
 .on((res) => console.log(res))
 .catch((err) => console.error(err))
 .send({message: 'yolo'})
