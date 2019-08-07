@@ -4,7 +4,7 @@ const routeguide = require("../firecomm/routeguide");
 const interceptorProvider = require("./interceptorProvider");
 
 const stub = new routeguide.RouteGuide(
-  "localhost:3001",
+  "localhost:3000",
   grpc.credentials.createInsecure()
 );
 
@@ -23,7 +23,7 @@ const testUnaryChat = () => {
   });
 };
 
-testUnaryChat();
+// testUnaryChat();
 
 const testClientStream = () => {
   const clientStream = stub.clientStream(
@@ -35,9 +35,10 @@ const testClientStream = () => {
   );
 
   clientStream.write(firstChat);
+  clientStream.write(firstChat);
   clientStream.end();
 };
-// testClientStream();
+testClientStream();
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);

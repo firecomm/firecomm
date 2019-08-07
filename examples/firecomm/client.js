@@ -7,9 +7,10 @@ const firecomm = require("../../index");
 
 let certificate = path.join(__dirname, "/server.crt");
 
-const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000", {
-  certificate
-});
+const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
+// , {
+//   certificate
+// }
 
 // stub.openChannel('localhost:3000');
 
@@ -37,10 +38,10 @@ const firstChat = {
 
 const { log: c } = console;
 
-stub
-  .unaryChat(firstChat)
-  .then(res => console.log(res))
-  .catch(err => console.log(err));
+// stub
+//   .unaryChat(firstChat)
+//   .then(res => console.log(res))
+//   .catch(err => console.log(err));
 
 const testUnaryChat = () => {
   // console.log(stub.getChannel().getConnectivityState(true))
@@ -56,12 +57,20 @@ const testClientStream = () => {
   const clientStream = stub.clientStream((err, res) => {
     if (err) console.log(err);
     console.log({ res });
+    clientStream.write(firstChat);
   });
+  console.log({ clientStream });
   clientStream.write(firstChat);
-  clientStream.end();
+  console.log({ clientStream });
+  clientStream.write(firstChat);
+
+  // setTimeout(() => {
+  //   // clientStream.write(firstChat);
+  //   clientStream.end();
+  // }, 400);
 };
 
-// testClientStream();
+testClientStream();
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);
@@ -74,12 +83,13 @@ const testServerStream = () => {
 // testServerStream();
 
 const testBidiChat = () => {
-  console.log({ stub });
-  console.log("bidichat:", stub.bidiChat);
+  // console.log({ stub });
+  // console.log("bidichat:", stub.bidiChat);
   const duplexStream = stub.bidiChat();
   duplexStream.write({ message: "dickhead from client" });
   duplexStream.on("data", data => {
     console.log(data);
+    duplexStream.write({ message: "dickhead from client" });
   });
   duplexStream.on("error", err => {
     console.log({ err });

@@ -17,21 +17,22 @@ function serverStream(context) {
 
 function clientStream(context) {
   // console.log('serverStream context: ', context);
-  context.on('data', data => {console.log(data)});
-  context.send({message: 'world'})
-  }
-
+  context.on("data", data => {
+    console.log(data);
+    context.send({ message: "world" });
+  });
+}
 
 function bidiChat(context) {
   // console.log('context', context);
   // console.log('context keys', Object.keys(context));
   // console.log('context proto', context.__proto__)
 
-  context.on('data', data => {
-    // console.log('data:', data);
-    context.write({message: data.message + ' World'});
+  context.on("data", data => {
+    console.log("data:", data);
+    context.write({ message: data.message + " World" });
   });
-  context.throw(new Error("error"));
+  // context.throw(new Error("error"));
   setTimeout(() => {
     context.end();
   }, 3000);
