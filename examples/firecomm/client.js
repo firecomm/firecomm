@@ -64,15 +64,15 @@ const testUnaryChat = () => {
 
 // testClientStream();
 
-const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
-  .send({message: 'yolo'})
-  .send(firstChat)
-  .on(data => console.log({ data }))
-  .catch(err => console.log({ err }))
+// const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
+//   .send({message: 'yolo'})
+//   .send(firstChat)
+//   .on(({message}) => console.log({ message }))
+//   .catch(err => console.log({ err }))
 
-  setInterval(()=>{
-    newClient.send({message:'please'})
-  }, 1000)
+//   setInterval(()=>{
+//     newClient.send({message:'please'})
+//   }, 1000)
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);
@@ -84,17 +84,23 @@ const testServerStream = () => {
 };
 // testServerStream();
 
-const testBidiChat = () => {
-  console.log({ stub });
-  console.log("bidichat:", stub.bidiChat);
-  const duplexStream = stub.bidiChat();
-  duplexStream.write({ message: "dickhead from client" });
-  duplexStream.on("data", data => {
-    console.log(data);
-  });
-  duplexStream.on("error", err => {
-    console.log({ err });
-  });
-};
+// const testBidiChat = () => {
+// const duplexStream = stub.bidiChat({meta: 'data'});
+// duplexStream.write({ message: "from client" });
+// duplexStream.on("data", ({message}) => {
+//   console.log(message);
+//   duplexStream.write({ message: "from client" });
+// });
+// duplexStream.on('error',(err => {
+//   console.log({ err });
+// }));
+
+const duplexStream = stub.bidiChat({meta: 'data'}, [interceptorProvider]).send({ message: "from client" }).on(({message}) => {
+  console.log(message);
+  duplexStream.send({ message: "from client2" });
+}).catch((err => {
+  console.log({ err });
+}));
+// };
 
 // testBidiChat();

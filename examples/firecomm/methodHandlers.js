@@ -37,13 +37,9 @@ function bidiChat(context) {
   // console.log('context proto', context.__proto__)
 
   context.on("data", data => {
-    // console.log('data:', data);
+    console.log('data:', data);
     context.write({ message: data.message + " World" });
   });
-  context.throw(new Error("error"));
-  setTimeout(() => {
-    context.end();
-  }, 3000);
 }
 
 module.exports = {
