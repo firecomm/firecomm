@@ -50,4 +50,11 @@ describe("Client stream decorator tests.", () => {
       });
     });
   });
+
+  describe("catch method", () => {
+    const myFun = () => {};
+    object.catch(myFun);
+    expect(mockOn.mock.calls[0][0]).toEqual("error");
+    expect(mockOn.mock.calls[0][1]).toBe(myFun);
+  });
 });
