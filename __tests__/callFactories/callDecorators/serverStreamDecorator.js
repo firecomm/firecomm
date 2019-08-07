@@ -3,6 +3,7 @@ const serverStreamDecorator = require("../../../lib/callFactories/callDecorators
 
 const customCall = {};
 
+const message = { message: "payload" };
 const mockEmit = jest.fn();
 const mockSendMetadata = jest.fn();
 const mockWrite = jest.fn();
@@ -74,8 +75,17 @@ describe("server stream decorator tests.", () => {
   });
 
   describe("tests for send", () => {
-    it("sends message", () => {});
+    it("sends message", () => {
+      customCall.send(message);
+      expect(mockWrite.mock.calls.length).toBe(1);
+    });
 
-    it("sends metadata as grpc metadata object", () => {});
+    it("sends metadata as grpc metadata object", () => {
+      customCall.send(message);
+      expect(mockSendMetadata.mock.calls[0][0].constructor.name).toBe(
+        "Metadata"
+      );
+      expect(mockSendMetadata.mock.calls.length).toBe(1);
+    });
   });
 });
