@@ -53,22 +53,26 @@ const testUnaryChat = () => {
 //   .then(data => console.log(data))
 //   .catch(err => console.error(err));
 
-const testClientStream = () => {
-  const clientStream = stub.clientStream((err, res) => {
-    if (err) console.log(err);
-    console.log({ res });
-  });
-  clientStream.write(firstChat);
-  clientStream.end();
-};
-
-stub
-  .clientStream()
-  .on(data => console.log({ data }))
-  .catch(err => console.log({ err }))
-  .send(firstChat);
+// const testClientStream = () => {
+//   const clientStream = stub.clientStream((err, res) => {
+//     if (err) console.log(err);
+//     console.log({ res });
+//   });
+//   clientStream.write(firstChat);
+//   clientStream.end();
+// };
 
 // testClientStream();
+
+const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
+  .send({message: 'yolo'})
+  .send(firstChat)
+  .on(data => console.log({ data }))
+  .catch(err => console.log({ err }))
+
+  setInterval(()=>{
+    newClient.send({message:'please'})
+  }, 1000)
 
 const testServerStream = () => {
   const serverStream = stub.serverStream(firstChat);
