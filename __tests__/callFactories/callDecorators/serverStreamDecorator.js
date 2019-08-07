@@ -49,6 +49,33 @@ describe("server stream decorator tests.", () => {
     });
   });
 
-  describe("tests for set", () => {});
-  describe("tests for send", () => {});
+  describe("tests for set", () => {
+    it("adds a new metadata object", () => {
+      const newMetadata = { meta: "data" };
+      customCall.set(newMetadata);
+      expect(customCall.metadata).toBe(newMetadata);
+    });
+
+    it("does not lose metadata properties", () => {
+      const oldMeta = { old: "old" };
+      const newMeta = { new: "new" };
+      customCall.set(oldMeta);
+      customCall.set(newMeta);
+      expect(customCall.metadata.hasOwnProperty("new")).toBeTruthy();
+    });
+
+    it("metadata object overwrites old properties", () => {
+      const oldMeta = { old: "old" };
+      const newMeta = { old: "new" };
+      customCall.set(oldMeta);
+      customCall.set(newMeta);
+      expect(customCall.metadata.old).toBe("new");
+    });
+  });
+
+  describe("tests for send", () => {
+    it("sends message", () => {});
+
+    it("sends metadata as grpc metadata object", () => {});
+  });
 });
