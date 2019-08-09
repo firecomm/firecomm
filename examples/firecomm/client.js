@@ -95,12 +95,13 @@ const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
 //   console.log({ err });
 // }));
 
-// const duplexStream = stub.bidiChat({meta: 'data'}, [interceptorProvider]).send({ message: "from client" }).on(({message}) => {
-//   console.log(message);
-//   duplexStream.send({ message: "from client2" });
-// }).catch((err => {
-//   console.log({ err });
-// }));
-// };
+const duplexStream = stub.bidiChat({meta: 'data'}, [interceptorProvider])
+  .send({ message: "from client" })
+  .on(({message}) => {
+  console.log(message);
+  duplexStream.send({ message: "from client2" });
+}).catch((err => {
+  console.log({ err });
+}));
 
 // testBidiChat();
