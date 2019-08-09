@@ -17,6 +17,8 @@ const waitFor = require("./middleware");
 
 const server = new firecomm.Server();
 
+console.log(package.RouteGuide);
+
 server.addService(
   package.RouteGuide,
   { unaryChat: unaryChat, serverStream, clientStream, bidiChat }
