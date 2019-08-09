@@ -11,7 +11,7 @@ service HealthCheck {
 message CheckHealthCheckRequest { repeated string services = 1; }
 
 message WatchHealthCheckRequest {
-  string interval = 1;
+  number interval = 1;
   repeated string services = 2;
 }
 
