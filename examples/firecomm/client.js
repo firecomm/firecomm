@@ -4,7 +4,6 @@ const path = require("path");
 const routeguide = require("./routeguide.js");
 
 const firecomm = require("../../index");
-const healthcheck = require("../../lib/custom-services/healthcheck-pkg");
 
 let certificate = path.join(__dirname, "/server.crt");
 
@@ -12,11 +11,17 @@ let certificate = path.join(__dirname, "/server.crt");
 
 const healthStub = new firecomm.HealthStub("localhost:3000");
 
+// healthStub
+//   .check()
+//   .on(res => console.log(res))
+//   .catch(err => console.log(err))
+//   .send({ services: [] });
+
 healthStub
-  .check()
+  .watch()
   .on(res => console.log(res))
   .catch(err => console.log(err))
-  .send({ services: [] });
+  .send({ services: [], interval: 5 });
 
 // console.log(Object.keys(healthStub));
 
