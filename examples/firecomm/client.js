@@ -17,11 +17,11 @@ const healthStub = new firecomm.HealthStub("localhost:3000");
 //   .catch(err => console.log(err))
 //   .send({ services: [] });
 
-healthStub
-  .watch()
-  .on(res => console.log(res))
-  .catch(err => console.log(err))
-  .send({ services: [], interval: 5 });
+// healthStub
+//   .watch()
+//   .on(res => console.log(res))
+//   .catch(err => console.log(err))
+//   .send({ services: [], interval: 5 });
 
 // console.log(Object.keys(healthStub));
 
