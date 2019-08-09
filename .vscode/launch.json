@@ -5,7 +5,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceRoot}/examples/firecomm/client.js"
+      "program": "${workspaceRoot}/examples/firecomm/server.js"
     }
   ]
 }
