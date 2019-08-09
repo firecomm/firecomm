@@ -64,24 +64,24 @@ const testUnaryChat = () => {
 
 // testClientStream();
 
-// const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
-//   .send({message: 'yolo'})
-//   .send(firstChat)
-//   .on(({message}) => console.log({ message }))
-//   .catch(err => console.log({ err }))
+const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
+  .send({message: 'yolo'})
+  .send(firstChat)
+  .on(({message}) => console.log({ message }))
+  .catch(err => console.log({ err }))
 
-//   setInterval(()=>{
-//     newClient.send({message:'please'})
-//   }, 1000)
+  setInterval(()=>{
+    newClient.send({message:'please'})
+  }, 1000)
 
-const testServerStream = () => {
-  const serverStream = stub.serverStream(firstChat);
-  // const serverStream = stub.serverStream();
-  // serverStream.write({path: 'firstChat'});
-  serverStream.on("data", data => {
-    console.log("data::", data), " ///////////// ";
-  });
-};
+// const testServerStream = () => {
+//   const serverStream = stub.serverStream(firstChat);
+//   // const serverStream = stub.serverStream();
+//   // serverStream.write({path: 'firstChat'});
+//   serverStream.on("data", data => {
+//     console.log("data::", data), " ///////////// ";
+//   });
+// };
 // testServerStream();
 
 // const testBidiChat = () => {
@@ -95,12 +95,12 @@ const testServerStream = () => {
 //   console.log({ err });
 // }));
 
-const duplexStream = stub.bidiChat({meta: 'data'}, [interceptorProvider]).send({ message: "from client" }).on(({message}) => {
-  console.log(message);
-  duplexStream.send({ message: "from client2" });
-}).catch((err => {
-  console.log({ err });
-}));
+// const duplexStream = stub.bidiChat({meta: 'data'}, [interceptorProvider]).send({ message: "from client" }).on(({message}) => {
+//   console.log(message);
+//   duplexStream.send({ message: "from client2" });
+// }).catch((err => {
+//   console.log({ err });
+// }));
 // };
 
 // testBidiChat();
