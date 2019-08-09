@@ -134,13 +134,11 @@ describe("Server tests for health check", () => {
 
   it("getStatus method returns the full status map if not passed params");
 
-  it("getStatus method returns null if passed params", () => {});
+  it("getStatus method returns null if passed wrong params", () => {});
 
-  it("getStatus method returns specific status", () => {});
-
-  it("Health check implementation handler takes in call and calls getStatus", () => {});
+  it("getStatus method returns specific status if one provided", () => {});
 
   it("setStatus method alters status map", () => {});
 
-  it("Server adds health check automatically", () => {});
+  it("Server adds health check to statusmap automatically", () => {});
 });
