@@ -8,7 +8,11 @@ const originalCall = {
   sendMetadata: mockSendMetadata
 };
 
+const basicCallDecorator = require("../../../lib/callFactories/callDecorators/basicCallDecorator");
 const serverUnaryDecorator = require("../../../lib/callFactories/callDecorators/serverUnaryDecorator");
+
+basicCallDecorator(object, originalCall);
+serverUnaryDecorator(object, mockSendCalback);
 
 describe("Server unary decorator tests.", () => {
   beforeEach(() => {
@@ -33,7 +37,6 @@ describe("Server unary decorator tests.", () => {
 
   xdescribe("Tests for throw method", () => {
     it("Expect throw to throw if not type error passed.", () => {
-      serverUnaryDecorator(object, mockSendCalback);
       const fakeError = "hello";
       expect(() => {
         object.throw(fakeError);
@@ -41,7 +44,6 @@ describe("Server unary decorator tests.", () => {
     });
 
     it("Throw passes error into sendCallback", () => {
-      serverUnaryDecorator(object, mockSendCalback);
       const fakeError = new Error("fake error");
       object.throw(fakeError);
       expect(mockSendCalback.mock.calls[0][0] instanceof Error).toBeTruthy();
@@ -50,7 +52,6 @@ describe("Server unary decorator tests.", () => {
 
   xdescribe("Tests for send method", () => {
     it("Passes send message into the send callback as the second parameter.", () => {
-      serverUnaryDecorator(object, mockSendCalback);
       const fakeMessage = { message: "hello" };
       object.send(fakeMessage);
       expect(
@@ -61,26 +62,21 @@ describe("Server unary decorator tests.", () => {
 
   describe("Tests for set method", () => {
     it("Adds new properties to the metadata object", () => {
-      serverUnaryDecorator(object, mockSendCalback);
       const fakeMetadata = { message: "hello" };
       object.set(fakeMetadata);
-      expect(
-        mockSendCalback.mock.calls[0][1].hasOwnProperty("message")
-      ).toBeTruthy();
+      object.send({ fakemessage: "fakemessage" });
+      expect(object.metadata.hasOwnProperty("message")).toBeTruthy();
     });
   });
 
   describe("Tests for metadata passing", () => {
     it("Passes send message into the send callback as the second parameter.", () => {
-      // add metadata to the call with set
-      //send
-      //check if send metadata was called
-      // serverUnaryDecorator(object, mockSendCalback);
-      // const fakeMessage = { message: "hello" };
-      // object.send(fakeMessage);
-      // expect(
-      //   mockSendCalback.mock.calls[0][1].hasOwnProperty("message")
-      // ).toBeTruthy();
+      const fakeMetadata = { message: "hello" };
+      object.set(fakeMetadata);
+      object.send({ fakemessage: "fakemessage" });
+      expect(
+        mockSendMetadata.mock.calls[0][0].hasOwnProperty("message")
+      ).toBeTruthy();
     });
   });
 });

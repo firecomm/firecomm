@@ -1,11 +1,11 @@
 const grpc = require("grpc");
 
-function unaryChat(ctx) {
+function unaryChat(call) {
   // ctx.setStatus({'trailer': 'value'});
   // ctx.throw(new Error('custom error message'));
   // console.log(ctx.metadata);
   // console.log(ctx.body);
-  console.log({ ctx });
+  console.log({ call });
   ctx.on(data => console.log({ data }));
   ctx.set({ hello: "world" });
   ctx.send({ message: "message body" });
@@ -19,8 +19,8 @@ function serverStream(context) {
   context.write({ message: " World" });
 }
 
-function clientStream(context) {
-  // console.log('serverStream context: ', context);
+function clientStream(call) {
+  console.log("serverStream call: ", call);
   context.on("data", data => {
     console.log(data);
     context.send({ message: "world" });
@@ -28,7 +28,7 @@ function clientStream(context) {
 }
 
 function bidiChat(context) {
-  // console.log('context', context);
+  console.log("context", context);
   // console.log('context keys', Object.keys(context));
   // console.log('context proto', context.__proto__)
 
