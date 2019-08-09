@@ -19,7 +19,7 @@ var testProto = protoDescriptor.test;
 
 const testService = testProto.Test;
 
-testService._serviceName = 'Test';
+testService._serviceName = "Test";
 
 xdescribe("Unit tests for Server", () => {
   it("Constructor extends the grpc server class.", () => {
@@ -130,29 +130,17 @@ xdescribe("Uncaught Error Handling.", () => {
 describe("Server tests for health check", () => {
   const server = new Server();
 
-  it("Has a health check Service.",()=>{
-    
-  });
+  it("Has a health check Service.", () => {});
 
-  it("getStatus method returns the full status map if not passed params")
+  it("getStatus method returns the full status map if not passed params");
 
-  it("getStatus method returns an error if passed params",()={
+  it("getStatus method returns null if passed params", () => {});
 
-  })
+  it("getStatus method returns specific status", () => {});
 
-  it("getStatus method returns specific status",()=>{
+  it("Health check implementation handler takes in call and calls getStatus", () => {});
 
-  })
+  it("setStatus method alters status map", () => {});
 
-  it("Health check implementation handler takes in call and calls getStatus",()=>{
-
-  })
-
-  it("setStatus method alters status map",()=>{
-    
-  })
-
-  it("Server adds health check automatically", ()=>{
-
-  })
+  it("Server adds health check automatically", () => {});
 });
