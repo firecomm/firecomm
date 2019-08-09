@@ -97,10 +97,14 @@ const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
 
 const duplexStream = stub.bidiChat({meta: 'data'}, [interceptorProvider])
   .send({ message: "from client" })
-  .on(({message}) => {
+  .on((data) => console.log(data))
+  
+duplexStream.on(({message}) => {
   console.log(message);
   duplexStream.send({ message: "from client2" });
-}).catch((err => {
+})
+
+duplexStream.catch((err => {
   console.log({ err });
 }));
 
