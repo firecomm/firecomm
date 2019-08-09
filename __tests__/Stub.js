@@ -95,7 +95,8 @@ describe("Unit tests for Stub", () => {
 
     const mockPort = "0.0.0.0:3000";
     const stub = Stub(mockServiceDef, mockPort);
-    stub.handlerName({ message: "fakemessage" });
+    stub.handlerName()
+    .send({ message: "fakemessage" });
     expect(jestMock.mock.calls.length).toBe(1);
   });
 });
@@ -107,26 +108,6 @@ describe("Tests for unaryCall", () => {
 
   beforeEach(() => {
     mockHandler.mockClear();
-  });
-
-  it("Promisifies Unary.", () => {
-    class mockServiceDef {
-      constructor(port, credentials) {}
-      HandlerName(...args) {
-        mockHandler(...args);
-      }
-    }
-    mockServiceDef.service = {
-      HandlerName: mockHandler
-    };
-
-    const mockPort = "0.0.0.0:3000";
-    const stub = Stub(mockServiceDef, mockPort);
-    const result = stub
-      .handlerName({ message: "hello" })
-      .then(res => {})
-      .catch(err => {});
-    expect(result).toBeInstanceOf(Promise);
   });
 
   it("Works on interceptor call.", () => {
@@ -143,8 +124,9 @@ describe("Tests for unaryCall", () => {
     const mockPort = "0.0.0.0:3000";
     const stub = Stub(mockServiceDef, mockPort);
     const result = stub
-      .handlerName({ message: "hello" }, [() => {}])
-      .then(res => {})
+      .handlerName({ meta: "data" }, [() => {}])
+      .send({ message: "hello" })
+      .on(res => {})
       .catch(err => {});
     expect(mockHandler.mock.calls.length).toBe(1);
   });

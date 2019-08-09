@@ -5,26 +5,30 @@ function unaryChat(call) {
   // ctx.throw(new Error('custom error message'));
   // console.log(ctx.metadata);
   // console.log(ctx.body);
-  console.log({ call });
-  ctx.on(data => console.log({ data }));
-  ctx.set({ hello: "world" });
-  ctx.send({ message: "message body" });
   // ctx.setTrailer({'hello': 'trailer'})
   // ctx.setMeta({'hello': 'world'})
   // ctx.send({message: 'what\'s up'});
   // throw new Error("uncaught error");
+  ctx.send({ message: "it works" });
 }
 
 function serverStream(context) {
-  context.write({ message: " World" });
+  // console.log(context);
+  let count = 0;
+  setInterval(() => {
+    count += 1;
+    context.send({ message: " World" + count });
+  }, 1000);
 }
 
-function clientStream(call) {
-  console.log("serverStream call: ", call);
+function clientStream(context) {
+  // console.log(context.__proto__);
+  // console.log('serverStream context: ', context);
+  // console.log(context.metadata, context.metaData);
   context.on("data", data => {
     console.log(data);
-    context.send({ message: "world" });
   });
+  setTimeout(() => context.send({ message: "world" }), 3000);
 }
 
 function bidiChat(context) {
@@ -33,18 +37,14 @@ function bidiChat(context) {
   // console.log('context proto', context.__proto__)
 
   context.on("data", data => {
-    // console.log('data:', data);
-    context.write({ message: data.message + " World" });
+    console.log('data:', data);
+    context.send({ message: data.message + " World" });
   });
-  context.throw(new Error("error"));
-  setTimeout(() => {
-    context.end();
-  }, 3000);
 }
 
 module.exports = {
   unaryChat,
   bidiChat,
-  serverStream,
-  clientStream
+  clientStream,
+  serverStream
 };

@@ -8,7 +8,7 @@ const firecomm = require("../../index");
 let certificate = path.join(__dirname, "/server.crt");
 
 const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
-// {
+// , {
 //   certificate
 // }
 
@@ -53,38 +53,59 @@ const testUnaryChat = () => {
 //   .then(data => console.log(data))
 //   .catch(err => console.error(err));
 
-const testClientStream = () => {
-  const clientStream = stub.clientStream((err, res) => {
-    if (err) console.log(err);
-    console.log({ res });
-  });
-  clientStream.write(firstChat);
-  clientStream.end();
-};
+// const testClientStream = () => {
+//   const clientStream = stub.clientStream((err, res) => {
+//     if (err) console.log(err);
+//     console.log({ res });
+//   });
+//   clientStream.write(firstChat);
+//   clientStream.end();
+// };
 
 // testClientStream();
 
-const testServerStream = () => {
-  const serverStream = stub.serverStream(firstChat);
-  // const serverStream = stub.serverStream();
-  // serverStream.write({path: 'firstChat'});
-  serverStream.on("data", data => {
-    console.log("data::", data), " ///////////// ";
-  });
-};
-testServerStream();
+const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
+  .send({message: 'yolo'})
+  .send(firstChat)
+  .on(({message}) => console.log({ message }))
+  .catch(err => console.log({ err }))
 
-const testBidiChat = () => {
-  console.log({ stub });
-  console.log("bidichat:", stub.bidiChat);
-  const duplexStream = stub.bidiChat();
-  duplexStream.write({ message: "dickhead from client" });
-  duplexStream.on("data", data => {
-    console.log(data);
-  });
-  duplexStream.on("error", err => {
-    console.log({ err });
-  });
-};
+  setInterval(()=>{
+    newClient.send({message:'please'})
+  }, 1000)
+
+// const testServerStream = () => {
+//   const serverStream = stub.serverStream(firstChat);
+//   // const serverStream = stub.serverStream();
+//   // serverStream.write({path: 'firstChat'});
+//   serverStream.on("data", data => {
+//     console.log("data::", data), " ///////////// ";
+//   });
+// };
+// testServerStream();
+
+// const testBidiChat = () => {
+// const duplexStream = stub.bidiChat({meta: 'data'});
+// duplexStream.write({ message: "from client" });
+// duplexStream.on("data", ({message}) => {
+//   console.log(message);
+//   duplexStream.write({ message: "from client" });
+// });
+// duplexStream.on('error',(err => {
+//   console.log({ err });
+// }));
+
+const duplexStream = stub.bidiChat({meta: 'data'}, [interceptorProvider])
+  .send({ message: "from client" })
+  .on((data) => console.log(data))
+  
+duplexStream.on(({message}) => {
+  console.log(message);
+  duplexStream.send({ message: "from client2" });
+})
+
+duplexStream.catch((err => {
+  console.log({ err });
+}));
 
 // testBidiChat();

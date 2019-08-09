@@ -19,15 +19,15 @@ const server = new firecomm.Server();
 
 server.addService(
   package.RouteGuide,
-  { unaryChat: [waitFor, unaryChat], serverStream, clientStream, bidiChat },
-  context => {
-    console.log("inside of service level middleware");
-  },
-  (err, call) => {
-    console.log("error from error handler:", err);
-    console.log("call in error:", call);
-    call.send({ message: "BULLDOZE THROUGH ERRORS" });
-  }
+  { unaryChat: unaryChat, serverStream, clientStream, bidiChat }
+  // context => {
+  //   console.log("inside of service level middleware");
+  // },
+  // (err, call) => {
+  //   console.log("error from error handler:", err);
+  //   console.log("call in error:", call);
+  //   call.send({ message: "BULLDOZE THROUGH ERRORS" });
+  // }
 );
 
 // console.log({ server });
@@ -43,10 +43,6 @@ server.addService(
 // {private_key: (__dirname + '/server.crt'), certificate: (__dirname +
 // '/server.key')}
 server.bind("0.0.0.0:3000");
-// {
-//   privateKey: __dirname + "/server.key",
-//   certificate: __dirname + "/server.crt"
-// }
 // console.log({server})
 // console.log(new grpc.Server().__proto__)
 

@@ -1,6 +1,6 @@
 {
   "name": "firecomm",
-  "version": "1.0.1-2",
+  "version": "1.0.4",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,8 +9,8 @@
     "client": "nodemon examples/vanilla_gRPC/client.js",
     "test": "jest --verbose",
     "test-coverage": "jest --verbose --coverage",
-    "start-FC": "nodemon examples/firecomm/server.js",
-    "client-FC": "nodemon examples/firecomm/client.js",
+    "start-FC": "node examples/firecomm/server.js",
+    "client-FC": "node examples/firecomm/client.js",
     "test2": "mocha"
   },
   "repository": {
