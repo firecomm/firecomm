@@ -7,9 +7,10 @@ const firecomm = require("../../index");
 
 let certificate = path.join(__dirname, "/server.crt");
 
-const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000", {
-  certificate
-});
+const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
+// {
+//   certificate
+// }
 
 // stub.openChannel('localhost:3000');
 
@@ -37,10 +38,10 @@ const firstChat = {
 
 const { log: c } = console;
 
-stub
-  .unaryChat(firstChat)
-  .then(res => console.log(res))
-  .catch(err => console.log(err));
+// stub
+//   .unaryChat(firstChat)
+//   .then(res => console.log(res))
+//   .catch(err => console.log(err));
 
 const testUnaryChat = () => {
   // console.log(stub.getChannel().getConnectivityState(true))
@@ -48,7 +49,7 @@ const testUnaryChat = () => {
   return stub.unaryChat(firstChat, { interceptors: [interceptorProvider] });
 };
 
-// testUnaryChat()
+// testUnaryChat({ hello: "metadata" })
 //   .then(data => console.log(data))
 //   .catch(err => console.error(err));
 
@@ -71,7 +72,7 @@ const testServerStream = () => {
     console.log("data::", data), " ///////////// ";
   });
 };
-// testServerStream();
+testServerStream();
 
 const testBidiChat = () => {
   console.log({ stub });
