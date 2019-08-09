@@ -49,7 +49,7 @@ const testUnaryChat = () => {
   return stub.unaryChat(firstChat, { interceptors: [interceptorProvider] });
 };
 
-// testUnaryChat()
+// testUnaryChat({ hello: "metadata" })
 //   .then(data => console.log(data))
 //   .catch(err => console.error(err));
 

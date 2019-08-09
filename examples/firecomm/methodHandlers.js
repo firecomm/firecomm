@@ -1,6 +1,6 @@
 const grpc = require("grpc");
 
-function unaryChat(ctx) {
+function unaryChat(call) {
   // ctx.setStatus({'trailer': 'value'});
   // ctx.throw(new Error('custom error message'));
   // console.log(ctx.metadata);
@@ -17,7 +17,7 @@ function serverStream(context) {
   let count = 0;
   setInterval(() => {
     count += 1;
-    context.write({ message: " World" + count });
+    context.send({ message: " World" + count });
   }, 1000);
 }
 
@@ -32,13 +32,13 @@ function clientStream(context) {
 }
 
 function bidiChat(context) {
-  // console.log('context', context);
+  console.log("context", context);
   // console.log('context keys', Object.keys(context));
   // console.log('context proto', context.__proto__)
 
   context.on("data", data => {
     console.log('data:', data);
-    context.write({ message: data.message + " World" });
+    context.send({ message: data.message + " World" });
   });
 }
 
