@@ -2,13 +2,18 @@ syntax = "proto3";
 
 package healthcheck;
 
-service Health {
-  rpc Check(HealthCheckRequest) returns (repeated HealthCheckResponse);
+service HealthCheck {
+  rpc Check(CheckHealthCheckRequest) returns (HealthCheckResponse);
 
-  rpc Watch(HealthCheckRequest) returns (stream repeated HealthCheckResponse);
+  rpc Watch(WatchHealthCheckRequest) returns (stream HealthCheckResponse);
 }
 
-message HealthCheckRequest { repeated string services = 1; }
+message CheckHealthCheckRequest { repeated string services = 1; }
+
+message WatchHealthCheckRequest {
+  string interval = 1;
+  repeated string services = 2;
+}
 
 message Status {
   string service = 1;
