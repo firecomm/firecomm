@@ -70,7 +70,9 @@ const firstChat = {
 
 // testClientStream();
 
-const newClient = stub.clientStream()
+const newClient = stub.clientStream(
+  {hello: 'world yo', 
+  options: {idempotentRequest: true}})
   .send({message: 'yolo'})
   .send(firstChat)
   .on((data) => console.log({ data }))

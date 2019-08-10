@@ -25,6 +25,7 @@ function clientStream(call) {
   // console.log(context.__proto__);
   // console.log('serverStream context: ', context);
   // console.log(context.metadata, context.metaData);
+  console.log(call.head);
   call.set(
     {please: 'work', dear: 'dog'}
     )
