@@ -21,14 +21,16 @@ function serverStream(context) {
   }, 1000);
 }
 
-function clientStream(context) {
+function clientStream(call) {
   // console.log(context.__proto__);
   // console.log('serverStream context: ', context);
   // console.log(context.metadata, context.metaData);
-  context.on("data", data => {
+  // call.set({please: 'work'})
+  // console.log(call.metadata);
+  call.on("data", data => {
     console.log(data);
   });
-  setTimeout(() => context.send({ message: "world" }), 5000);
+  setTimeout(() => call.send({ message: "world" }), 5000);
 }
 
 function bidiChat(context) {

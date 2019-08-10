@@ -75,7 +75,7 @@ const newClient = stub.clientStream()
   .send(firstChat)
   .on((data) => console.log({ data }))
   .on('status', (status) => console.log({ status }))
-  // .on('metadata', (metadata) => console.log({ metadata }))
+  .on('metadata', (metadata) => console.log({ metadata }))
   .catch(err => console.log({ err }))
 
 
