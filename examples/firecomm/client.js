@@ -75,9 +75,8 @@ const newClient = stub.clientStream()
   .send(firstChat)
   .on((data) => console.log({ data }))
   .on('status', (status) => console.log({ status }))
-  .on('metadata', (metadata) => console.log({ metadata }))
+  .on('metadata', (metadata) => console.log(metadata, metadata.getMap()))
   .catch(err => console.log({ err }))
-
 
   setInterval(()=>{
     newClient.send({message:'please'})
