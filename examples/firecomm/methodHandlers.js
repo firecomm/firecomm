@@ -32,12 +32,11 @@ function clientStream(context) {
 }
 
 function bidiChat(context) {
-  console.log("context", context);
   // console.log('context keys', Object.keys(context));
   // console.log('context proto', context.__proto__)
 
   context.on("data", data => {
-    console.log('data:', data);
+    console.log("data:", data);
     context.send({ message: data.message + " World" });
   });
 }

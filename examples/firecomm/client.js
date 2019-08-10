@@ -8,9 +8,22 @@ const firecomm = require("../../index");
 let certificate = path.join(__dirname, "/server.crt");
 
 const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
-// , {
-//   certificate
-// }
+
+const healthStub = new firecomm.HealthStub("localhost:3000");
+
+// healthStub
+//   .check()
+//   .on(res => console.log(res))
+//   .catch(err => console.log(err))
+//   .send({ services: [] });
+
+// healthStub
+//   .watch()
+//   .on(res => console.log(res))
+//   .catch(err => console.log(err))
+//   .send({ services: [], interval: 5 });
+
+// console.log(Object.keys(healthStub));
 
 // stub.openChannel('localhost:3000');
 
@@ -20,34 +33,27 @@ const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
 
 const interceptorProvider = require("./interceptorProvider");
 
-// console.log(Object.keys(stub))
-
-// const stub = generateStub(routeguide.RouteGuide);
-// const actualStub = new stub('localhost:3000',
-// grpc.credentials.createInsecure())
-// console.log(actualStub)
-
-// const stub = new routeguide.RouteGuide(
-//     'localhost:3000', grpc.credentials.createInsecure());
-
 // console.log(stub.getChannel().getConnectivityState(true))
 
 const firstChat = {
   message: "Hello"
 };
 
-const { log: c } = console;
+// const newClient = stub
+//   .clientStream({ meta: "data" }, [interceptorProvider])
+//   .send({ message: "yolo" })
+//   .send(firstChat)
+//   .on(({ message }) => console.log({ message }))
+//   .catch(err => console.log({ err }));
 
-// stub
-//   .unaryChat(firstChat)
-//   .then(res => console.log(res))
-//   .catch(err => console.log(err));
+// setInterval(() => {
+//   newClient.send({ message: "please" });
+// }, 1000);
 
-const testUnaryChat = () => {
-  // console.log(stub.getChannel().getConnectivityState(true))
-
-  return stub.unaryChat(firstChat, { interceptors: [interceptorProvider] });
-};
+// const duplexStream = stub
+//   .bidiChat({ meta: "data" }, [interceptorProvider])
+//   .send({ message: "from client" })
+//   .on(data => console.log(data));
 
 // testUnaryChat({ hello: "metadata" })
 //   .then(data => console.log(data))
@@ -69,6 +75,7 @@ const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
   .send(firstChat)
   .on((data) => console.log({ data }))
   .catch(err => console.log({ err }))
+  .retry()
 
   setInterval(()=>{
     newClient.send({message:'please'})
@@ -89,9 +96,10 @@ const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
 // duplexStream.write({ message: "from client" });
 // duplexStream.on("data", ({message}) => {
 //   console.log(message);
-//   duplexStream.write({ message: "from client" });
+//   duplexStream.send({ message: "from client2" });
 // });
-// duplexStream.on('error',(err => {
+
+// duplexStream.catch(err => {
 //   console.log({ err });
 // }));
 
