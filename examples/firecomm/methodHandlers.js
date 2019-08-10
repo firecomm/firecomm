@@ -12,12 +12,12 @@ function unaryChat(call) {
   ctx.send({ message: "it works" });
 }
 
-function serverStream(context) {
+function serverStream(call) {
   // console.log(context);
   let count = 0;
   setInterval(() => {
     count += 1;
-    context.send({ message: " World" + count });
+    call.send({ message: " World" + count });
   }, 1000);
 }
 

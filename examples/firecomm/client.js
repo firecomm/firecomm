@@ -72,7 +72,12 @@ const firstChat = {
 
 const newClient = stub.clientStream(
   {hello: 'world yo', 
-  options: {idempotentRequest: true}})
+  options: {
+    idempotentRequest: true,
+    cacheableRequest: true,
+    corked: true,
+    waitForReady: false,
+  }})
   .send({message: 'yolo'})
   .send(firstChat)
   .on((data) => console.log({ data }))
