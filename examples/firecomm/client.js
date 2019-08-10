@@ -67,7 +67,7 @@ const testUnaryChat = () => {
 const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
   .send({message: 'yolo'})
   .send(firstChat)
-  .on(({message}) => console.log({ message }))
+  .on((data) => console.log({ data }))
   .catch(err => console.log({ err }))
 
   setInterval(()=>{
@@ -95,17 +95,17 @@ const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
 //   console.log({ err });
 // }));
 
-const duplexStream = stub.bidiChat({meta: 'data'}, [interceptorProvider])
-  .send({ message: "from client" })
-  .on((data) => console.log(data))
+// const duplexStream = stub.bidiChat({meta: 'data'}, [interceptorProvider])
+//   .send({ message: "from client" })
+//   .on((data) => console.log(data))
   
-duplexStream.on(({message}) => {
-  console.log(message);
-  duplexStream.send({ message: "from client2" });
-})
+// duplexStream.on(({message}) => {
+//   console.log(message);
+//   duplexStream.send({ message: "from client2" });
+// })
 
-duplexStream.catch((err => {
-  console.log({ err });
-}));
+// duplexStream.catch((err => {
+//   console.log({ err });
+// }));
 
 // testBidiChat();

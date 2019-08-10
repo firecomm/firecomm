@@ -28,7 +28,7 @@ function clientStream(context) {
   context.on("data", data => {
     console.log(data);
   });
-  setTimeout(() => context.send({ message: "world" }), 3000);
+  setTimeout(() => context.send({ message: "world" }), 5000);
 }
 
 function bidiChat(context) {
