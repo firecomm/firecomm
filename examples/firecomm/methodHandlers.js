@@ -36,13 +36,13 @@ function clientStream(call) {
   setTimeout(() => call.send({ message: "world" }), 5000);
 }
 
-function bidiChat(context) {
+function bidiChat(call) {
   // console.log('context keys', Object.keys(context));
   // console.log('context proto', context.__proto__)
-
-  context.on("data", data => {
-    console.log("data:", data);
-    context.send({ message: data.message + " World" });
+  console.log(call.head);
+  call.on("data", data => {
+    // console.log("data:", data);
+    call.send({ message: data.message + " World" });
   });
 }
 

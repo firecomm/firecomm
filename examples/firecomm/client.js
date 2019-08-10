@@ -70,24 +70,24 @@ const firstChat = {
 
 // testClientStream();
 
-const newClient = stub.clientStream(
-  {hello: 'world yo', 
-  options: {
-    idempotentRequest: true,
-    cacheableRequest: true,
-    corked: true,
-    waitForReady: false,
-  }})
-  .send({message: 'yolo'})
-  .send(firstChat)
-  .on((data) => console.log({ data }))
-  .on('status', (status) => console.log({ status }))
-  .on('metadata', (metadata) => console.log(metadata, metadata.getMap()))
-  .catch(err => console.log({ err }))
+// const newClient = stub.clientStream(
+//   {hello: 'world yo', 
+//   options: {
+//     idempotentRequest: true,
+//     cacheableRequest: true,
+//     corked: true,
+//     waitForReady: false,
+//   }})
+//   .send({message: 'yolo'})
+//   .send(firstChat)
+//   .on((data) => console.log({ data }))
+//   .on('status', (status) => console.log({ status }))
+//   .on('metadata', (metadata) => console.log(metadata, metadata.getMap()))
+//   .catch(err => console.log({ err }))
 
-  setInterval(()=>{
-    newClient.send({message:'please'})
-  }, 1000)
+//   setInterval(()=>{
+//     newClient.send({message:'please'})
+//   }, 1000)
 
 // const testServerStream = () => {
 //   const serverStream = stub.serverStream(firstChat);
@@ -99,17 +99,25 @@ const newClient = stub.clientStream(
 // };
 // testServerStream();
 
-// const testBidiChat = () => {
-// const duplexStream = stub.bidiChat({meta: 'data'});
-// duplexStream.write({ message: "from client" });
-// duplexStream.on("data", ({message}) => {
-//   console.log(message);
-//   duplexStream.send({ message: "from client2" });
-// });
 
-// duplexStream.catch(err => {
-//   console.log({ err });
-// }));
+const duplexStream = stub.bidiChat(
+  {bidi: 'meta',
+  options: {
+      idempotentRequest: true,
+      cacheableRequest: true,
+      corked: true,
+      waitForReady: false,
+    }}
+  );
+duplexStream.write({ message: "from client" });
+duplexStream.on("data", ({message}) => {
+  // console.log(message);
+  duplexStream.send({ message: "from client2" });
+});
+
+duplexStream.catch(err => {
+  console.log({ err });
+});
 
 // const duplexStream = stub.bidiChat({meta: 'data'}, [interceptorProvider])
 //   .send({ message: "from client" })
