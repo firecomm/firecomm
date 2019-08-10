@@ -9,7 +9,7 @@ let certificate = path.join(__dirname, "/server.crt");
 
 const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
 
-const healthStub = new firecomm.HealthStub("localhost:3000");
+// const healthStub = new firecomm.HealthStub("localhost:3000");
 
 // healthStub
 //   .check()
@@ -70,12 +70,14 @@ const firstChat = {
 
 // testClientStream();
 
-const newClient = stub.clientStream({meta: 'data'}, [interceptorProvider])
+const newClient = stub.clientStream()
   .send({message: 'yolo'})
   .send(firstChat)
   .on((data) => console.log({ data }))
+  .on('status', (status) => console.log({ status }))
+  // .on('metadata', (metadata) => console.log({ metadata }))
   .catch(err => console.log({ err }))
-  .retry()
+
 
   setInterval(()=>{
     newClient.send({message:'please'})
