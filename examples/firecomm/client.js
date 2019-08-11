@@ -58,6 +58,8 @@ const firstChat = {
 stub.unaryChat({ hello: "metadata" })
   .send({firstChat})
   .on(data => console.log(data))
+  .on('metadata', data => console.log(data))
+  .on('status', data => console.log(data))
   .catch(err => console.error(err))
 
 // const testClientStream = () => {
