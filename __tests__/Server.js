@@ -132,7 +132,7 @@ describe("Server tests for health check", () => {
 
   it("Has a health check Service.", () => {});
 
-  it("getStatus method returns the full status map if not passed params");
+  it("getStatus method returns the full status map if not passed params", () => {});
 
   it("getStatus method returns null if passed wrong params", () => {});
 
