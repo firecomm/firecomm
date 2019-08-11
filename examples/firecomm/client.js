@@ -55,9 +55,10 @@ const firstChat = {
 //   .send({ message: "from client" })
 //   .on(data => console.log(data));
 
-// testUnaryChat({ hello: "metadata" })
-//   .then(data => console.log(data))
-//   .catch(err => console.error(err));
+stub.unaryChat({ hello: "metadata" })
+  .send({firstChat})
+  .on(data => console.log(data))
+  .catch(err => console.error(err))
 
 // const testClientStream = () => {
 //   const clientStream = stub.clientStream((err, res) => {
@@ -91,28 +92,28 @@ const firstChat = {
 
 // const testServerStream = () => {
   // const serverStream = stub.serverStream(firstChat);
-  const serverStream = stub.serverStream(
-    {
-      stream: 'server',
-      options: {
-        idempotentRequest: true,
-        cacheableRequest: true,
-        corked: true,
-        waitForReady: false,
-      }
-    }
-    );
-  serverStream.write(firstChat);
-  serverStream.on("data", data => {
-    console.log(data);
-  })
-  serverStream.on("status", status => {
-    console.log(status);
-  })
-  serverStream.on("metadata", metadata => {
-    console.log(metadata);
-  })
-  .catch((err) => console.error(err));
+  // const serverStream = stub.serverStream(
+  //   {
+  //     stream: 'server',
+  //     options: {
+  //       idempotentRequest: true,
+  //       cacheableRequest: true,
+  //       corked: true,
+  //       waitForReady: false,
+  //     }
+  //   }
+  //   );
+  // serverStream.write(firstChat);
+  // serverStream.on("data", data => {
+  //   console.log(data);
+  // })
+  // serverStream.on("status", status => {
+  //   console.log(status);
+  // })
+  // serverStream.on("metadata", metadata => {
+  //   console.log(metadata);
+  // })
+  // .catch((err) => console.error(err));
 // };
 // testServerStream();
 

@@ -9,7 +9,7 @@ function unaryChat(call) {
   // ctx.setMeta({'hello': 'world'})
   // ctx.send({message: 'what\'s up'});
   // throw new Error("uncaught error");
-  ctx.send({ message: "it works" });
+  call.send({ message: "it works" });
 }
 
 function serverStream(call) {
