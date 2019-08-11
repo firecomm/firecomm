@@ -9,35 +9,41 @@ function unaryChat(call) {
   // ctx.setMeta({'hello': 'world'})
   // ctx.send({message: 'what\'s up'});
   // throw new Error("uncaught error");
-  ctx.send({ message: "it works" });
+  call.send({ message: "it works" });
 }
 
-function serverStream(context) {
+function serverStream(call) {
   // console.log(context);
+  call.set({server: 'streamed metadata'})
   let count = 0;
   setInterval(() => {
     count += 1;
-    context.send({ message: " World" + count });
+    call.send({ message: " World" + count });
   }, 1000);
 }
 
-function clientStream(context) {
+function clientStream(call) {
   // console.log(context.__proto__);
   // console.log('serverStream context: ', context);
   // console.log(context.metadata, context.metaData);
-  context.on("data", data => {
+  console.log(call.head);
+  call.set(
+    {please: 'work', dear: 'dog'}
+    )
+  // console.log(call.metadata);
+  call.on("data", data => {
     console.log(data);
   });
-  setTimeout(() => context.send({ message: "world" }), 3000);
+  setTimeout(() => call.send({ message: "world" }), 5000);
 }
 
-function bidiChat(context) {
+function bidiChat(call) {
   // console.log('context keys', Object.keys(context));
   // console.log('context proto', context.__proto__)
-
-  context.on("data", data => {
-    console.log("data:", data);
-    context.send({ message: data.message + " World" });
+  console.log(call.head);
+  call.on("data", data => {
+    // console.log("data:", data);
+    call.send({ message: data.message + " World" });
   });
 }
 
