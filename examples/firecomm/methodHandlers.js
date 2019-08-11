@@ -14,6 +14,7 @@ function unaryChat(call) {
 
 function serverStream(call) {
   // console.log(context);
+  call.set({server: 'streamed metadata'})
   let count = 0;
   setInterval(() => {
     count += 1;

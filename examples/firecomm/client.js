@@ -91,16 +91,26 @@ const firstChat = {
 
 // const testServerStream = () => {
   // const serverStream = stub.serverStream(firstChat);
-  const serverStream = stub.serverStream();
+  const serverStream = stub.serverStream(
+    {
+      stream: 'server',
+      options: {
+        idempotentRequest: true,
+        cacheableRequest: true,
+        corked: true,
+        waitForReady: false,
+      }
+    }
+    );
   serverStream.write(firstChat);
   serverStream.on("data", data => {
-    console.log({data});
+    console.log(data);
   })
   serverStream.on("status", status => {
-    console.log({status});
+    console.log(status);
   })
   serverStream.on("metadata", metadata => {
-    console.log({metadata});
+    console.log(metadata);
   })
   .catch((err) => console.error(err));
 // };
