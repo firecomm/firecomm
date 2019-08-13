@@ -5,9 +5,11 @@ const routeguide = require("./routeguide.js");
 
 const firecomm = require("../../index");
 
-let certificate = path.join(__dirname, "/server.crt");
+let certificate = path.join(__dirname, "/test2.crt");
 
-const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
+const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000", {
+  certificate
+});
 
 // const healthStub = new firecomm.HealthStub("localhost:3000");
 
