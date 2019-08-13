@@ -80,12 +80,16 @@ xdescribe("Unit tests for Server", () => {
   });
 });
 
-xdescribe("Unit tests for bind.", () => {
+describe("Unit tests for bind.", () => {
   it("Bind should support a single port insecurely if no config supplied.", () => {
     const server = new Server();
     const boundPorts = server.bind("0.0.0.0:3000");
     expect(boundPorts[0]).toBeGreaterThanOrEqual(0);
   });
+
+  it("If one cert is passed, it is applied to all of the different ports.", () => {});
+
+  it("If no cert is passed with an array of ports, they are all generated but insecure.", () => {});
 });
 
 xdescribe("Uncaught Error Handling.", () => {
@@ -127,7 +131,7 @@ xdescribe("Uncaught Error Handling.", () => {
   });
 });
 
-describe("Server tests for health check", () => {
+xdescribe("Server tests for health check", () => {
   const server = new Server();
 
   it("Has a health check Service.", () => {});
