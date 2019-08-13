@@ -37,8 +37,8 @@ server.addService(
 //   server.handlers["/routeguide.RouteGuide/UnaryChat"]
 // );
 
-let certPath = path.join(__dirname, "/test2.crt");
-let keyPath = path.join(__dirname, "/test2.key");
+let certPath = path.join(__dirname, "/server.crt");
+let keyPath = path.join(__dirname, "/server.key");
 
 const result = server.bind("0.0.0.0:3000", {
   privateKey: keyPath,
