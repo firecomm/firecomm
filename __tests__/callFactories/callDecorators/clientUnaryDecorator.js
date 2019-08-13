@@ -33,6 +33,12 @@ describe("tests for client unary decorator", () => {
       mockOn.mockClear();
       mockCallback.mockClear();
     });
+
+    it("if passed metadata as a string, calls callback on the head", () => {
+      customCall.on("metadata", mockCallback);
+      expect(mockCallback.mock.calls.length).toBe(1);
+    });
+
     it("on should accept a data string and callback", () => {
       customCall.on("data", mockCallback);
       expect(mockCallback.mock.calls.length).toBe(1);
