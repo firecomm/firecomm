@@ -1,5 +1,5 @@
 # FIRECOMM
-> 1.0.2.alpha release
+> 2.0.1.beta release
 
 Framework extending gRPC-Node. Standardized syntax for transpiling protoBufs into Node.js, creating servers, clients, and managing gRPC channels in distributed systems.
 
@@ -7,167 +7,205 @@ Framework extending gRPC-Node. Standardized syntax for transpiling protoBufs int
 
 **gRPC-Node** has a complex API but does not ***document*** or ***support*** all of the features available in **gRPC-goLang** or **gRPC-Java**. We standardize the syntax to expose all ***existing*** features and extend ***undersupported*** features in the Node.js ecosystem. 
 
-### Install
+# Getting Started
+## Install
 ``` 
 npm i --save firecomm
 ```
 
-## Getting Started
-#### 1. Define a ***.proto*** file
+## 1. Define a `.proto` file
+Let's begin by creating a file named `exampleAPI.proto` that will live inside a `proto` folder. This file will define the name of the *Package*, the names of the *Services*, the *RPC methods* and the structured data of each *Message* sent and received.
+
 ```protobuf
-syntax = 'proto3';
+// proto/exampleAPI.proto
+syntax = "proto3";
 
 package exampleAPI;
 
-service FileTransfer {
-  rpc ClientToServer (stream File) returns (Confirmation) {};
-  rpc ServerToClient (Confirmation) returns (stream File) {}
+service ChattyMath {
+  rpc BidiMath (stream Benchmark) returns (stream Benchmark) {};
 }
 
-service HeavyMath {
-  rpc UnaryExample (Math) returns (Math) {}
-  rpc BidiExample (stream Math) returns (stream Math) {}
-}
-
-message Confirmation {
-  bool status = 1;
-  string comments = 2;
-}
-
-message File {
-  bytes fileBuffer = 1;
-}
-
-message Math {
-  double num = 1;
+message Benchmark {
+  double requests = 1;
+  double responses = 2;
 }
 ```
 
-#### 2. build( )
-##### parameters:
-1. ##### PROTO_PATH *string* // absolute path to the .proto file to be transpiled into Node.js
-2. ##### *optional* CONFIG_OBJECT *object* // object with nine properties for transpiling data types. 
-```javascript 
+> Each *RPC Method* clearly defines the Message object to be sent and received. The Object we send will have the exact properties `peerSocket` with a string value and `req` or `res` with a value of `double`, which can be a Number or a String in JavaScript based on the build configuration.
+
+## 2. Let's `build()` a `package`
+
+Let's pass an absolute path to our `.proto` file to build our *Package*. We will create a `package.js` file which will live in our root folder and `export` an Object containing the compiled *Service* and *RPC method*.
+
+```javascript
+// package.js
 const { build } = require( 'firecomm' );
+const path = require( 'path' );
+const PROTO_PATH = path.join( __dirname, './proto/exampleAPI.proto' );
+
+const CONFIG_OBJECT = {
+  keepCase: true, // keeps everything camelCased
+  longs: Number, // compiles the potentially enormous `double`s for our BenchmarkMsg requests and responses into a JavaScript Number rather than a String
+}
 const package = build( PROTO_PATH, CONFIG_OBJECT );
 module.exports = package;
 ```
-***returns** a gRPC package **object** with* `SERVICE_DEFINITION`*s as properties*
 
-#### 3. Create a server
+## 3. Create a server
+Next, let's construct a *Server* in a new `server` folder and file. 
+
 ```javascript
+// /server/server.js
 const { Server } = require( 'firecomm' );
 const server = new Server();
 ```
-***returns** a gRPC server instance **object***
-#### 4. Define your `HANDLER_FUNCTION` for each `RPC_METHOD` and/or `MIDDLEWARE_STACK` functions for each `RPC_METHOD`
-1. ##### CALL *object* // call methods are specific to each `CALL_TYPE`. Possible `CALL_TYPE`s are `UNARY`, `CLIENT_STREAM`, `SERVER_STREAM`, and `DUPLEX`.
+
+## 4. Define the server-side handlers for our `ChattyMath` *Service*.
+
+Let's define handler functions for our `BidiMath` *RPC method*. Server-Side handlers are how we will interact with the Client-side requests.
+
 ```javascript
-exampleUnaryHandler( CALL ) {
-  // single response
-  CALL.send({ response: value });
-};
-exampleClientStreamHandler( CALL ) {
-  // listeners for stream from client
-  CALL.on('data', request => someFunctionality(request));
-  // single response
-  CALL.send({ response: value });
-};
-exampleServerStreamHandler( CALL ) {
-  // some logic to warrant a streaming response
-  CALL.write({ responseChunk: value });
-};
-exampleDuplexHandler( CALL ) {
-  // listeners for stream from client
-  CALL.on('data', request => someFunctionality(request));
-  // some logic to warrant a streaming response
-  CALL.write({ responseChunk: value });
-};
+// /server/chattyMathHandlers.js
+function BidiMathHandler(bidi) {
+  let start;
+  let end;
+  bidi
+    .on('metadata', (metadata) => {
+      start = Number(process.hrtime.bigint());
+      bidi.set({thisSetsMetadata: 'responses incoming'})
+      console.log(metadata.getMap());
+    })
+    .on('error', (err) => {
+      console.exception(err)
+    })
+    .on('data', (benchmark) => {
+      bidi.send(
+        {
+          requests: benchmark.requests, 
+          responses: benchmark.responses + 1
+        }
+      );
+      if (benchmark.requests % 10000 === 0) {
+        end = Number(process.hrtime.bigint());
+      console.log(
+        'client address:', bidi.getPeer(),
+        '\nnumber of requests:', benchmark.requests,
+        '\navg millisecond speed per request:', ((end - start) /1000000) / benchmark.requests
+      );
+    }
+  })
+}
+
 module.exports = { 
-	exampleUnary,
-	exampleClientStream,
-	exampleServerStream,
-	exampleDuplex,
+	BidiMathHandler,
 }
 ```
-*doesn't **return** anything*
-#### 5. Add each `SERVICE_DEFINITION` for the server to handle
-##### parameters:
-1. ##### SERVICE_DEFINITION *object* // Service as it is named on your `.proto` file. **Is a property on the built package.**
-2. ##### RPC_METHODS_OBJECT *object* // maps each `RPC_METHOD`	to it's `HANDLER_FUNCTION` or `MIDDLEWARE_STACK`.
-	##### RPC_METHOD *property* // must match each `rpc Method` named in the `.proto`
-	##### HANDLER_FUNCTION *value* // function to handle the `rpc Method`
-	##### *OR*
-	##### MIDDLEWARE_STACK *value* // array of *functions* to handle the `rpc Method`. The main `HANDER_FUNCTION` to be run must be last in the array.
-```javascript
-const { Server } = require( 'firecomm' );
-const server = new Server();
-server.addService( SERVICE, RPC_METHODS_OBJECT );
-```
-*doesn't **return** anything*
-#### 6. Bind the server `SOCKETS`
-##### parameters:
-1. ##### SOCKETS *string* or *array* // string composed of IP_ADDRESS: PORT or an array of strings to bind multiple sockets
-2. ##### *optional* SECURITY_CONFIG_OBJECT *object* // object defining the security of the connection. Default is insecure. 
-```javascript
-const { Server } = require( 'firecomm' );
-const server = new Server();
-server.addService( SERVICE, RPC_METHODS_OBJECT );
-server.bind( SOCKETS, SECURITY_CONFIG_OBJECT );
-```
-*doesn't **return** anything*
-#### 7. Start the server
-```javascript
-const { Server } = require( 'firecomm' );
-const server = new Server();
-server.addService( SERVICE, RPC_METHODS_OBJECT );
-server.bind( SOCKETS, SECURITY_CONFIG_OBJECT );
-server.start();
-```
-*doesn't **return** anything*
-#### 8.  Open a client Stub with a `SERVICE_DEFINITION` and `SOCKET`
-##### parameters:
-1. ##### SERVICE_DEFINITION *object* // Service as it is named on your `.proto` file. **Is a property on the built package.**
-2. ##### SOCKET *string* // string composed of IP_ADDRESS: PORT
-3. ##### *optional* SECURITY_CONFIG_OBJECT *object* // object defining the security of the connection. Default is insecure. 
-```javascript
-const { Stub } = require( 'firecomm' );
-const clientStub = new Stub( 
-	SERVICE, 
-	SOCKET, 
-	SECURITY_CONFIG_OBJECT 
-);
-```
-***returns** a gRPC stub instance **object***
-#### 9.  Make `RPC_METHOD` requests from the `STUB`
-##### parameters:
 
-1.  ##### MESSAGE _object_ // Must have the properties of the `message` defined to be sent as `REQUEST` in the `RPC_METHOD` as defined in this stub's `SERVICE`. The `RPC_METHOD` that exists on the `STUB` matches the name you gave for the `RPC_METHOD` in your built `.proto` file.
-2. ##### *only for* **`UNARY`** *and* **`CLIENT_STREAM`** CALLBACK *function* // function which runs on once `CLIENT` gets a `RESPONSE` from `SERVER`
+## 5. Add each *Service* from the package to the `Server`
+
+Let's go back to the `server.js` file and map each *Service* onto our `Server`. Mirroring the structure of the `.proto` file, the *Package* Object we built has each *Service* on it as properties. We use the `Server.addService` method to add each `Service` one at a time and map each *RPC method* to the handler we want to use.  
+
 ```javascript
-const { Stub } = require( 'firecomm' );
-const clientStub = new Stub( 
-	SERVICE, 
-	SOCKET, 
-	SECURITY_CONFIG_OBJECT 
-);
-clientStub.exampleUnary( MESSAGE, CALLBACK );
-const clientStream = 
-  clientStub.exampleClientStream( MESSAGE );
-  // some logic to warrant a streaming response
-  clientStream.write( MESSAGE );
-const serverStream = 
-  clientStub.exampleServerStream( MESSAGE );
-  // listeners for stream from server
-  serverStream.on( 'data', response => 
-  someFunctionality(request));
-const duplex = 
-  clientStub.exampleDuplex( MESSAGE );
-  // listeners for stream from server
-  duplex.on( 'data', response => 
-  someFunctionality(request));
-  // some logic to warrant a streaming request
-  duplex.write( 'data', response => 
-  someFunctionality(request));
+// /server/server.js
+const { Server } = require( 'firecomm' );
+const package = require( '../package.js' );
+const { BidiMathHandler } = require ( './chattyMathHandlers.js );
+
+new Server()
+  .addService( package.ChattyMath,   {
+  BidiMath: BidiMathHandler,
+})
 ```
-`CLIENT_STREAM`, `SERVER_STREAM`, and `DUPLEX` ***return** a stream **object***
+
+## 6. Bind the server to sockets
+
+```javascript
+// /server/server.js
+const { Server } = require( 'firecomm' );
+const package = require( '../package.js' );
+const { BidiMathHandler } = require ( './chattyMathHandlers.js' );
+
+new Server()
+  .addService( package.ChattyMath,   {
+  BidiMath: BidiMathHandler,
+})
+  .bind('0.0.0.0: 3000')
+```
+> Note: `Server`s can be passed an array of strings to bind any number of sockets. For example:
+> ```javascript
+> server.bind( [ 
+>   '0.0.0.0: 3000', 
+>   '0.0.0.0: 8080', 
+>   '0.0.0.0: 9900',
+> ] );
+> ```
+## 7. Start the server
+```javascript
+// /server/server.js
+const { Server } = require( 'firecomm' );
+const package = require( '../package.js' );
+const { BidiMathHandler } = require ( './heavyMathHandlers.js' );
+
+new Server()
+  .addService( 
+    package.ChattyMath,   
+    { BidiMath: BidiMathHandler }
+  )
+  .bind('0.0.0.0: 3000')
+  .start();
+```
+> Run your new firecomm/gRPC-Node server with: `node /server/server.js`. It may also be worthwhile to map this command to `npm start` in your `package.json`.
+
+## 8.  Create a *Stub* for the `ChattyMath` service:
+Now that the *Server* is fully fleshed out, let's create a *Stub* with access to each *RPC method* in the  `ChattyMath` *Service*. We'll create a `chattyMath.js` file which will live inside our `clients` folder.
+```javascript
+// /clients/chattyMath.js
+const { Stub } = require( 'firecomm' );
+const package = require( '../package.js' )
+const stub = new Stub( 
+	package.ChattyMath, 
+	'localhost: 3000', // also can be '0.0.0.0: 3000'
+);
+```
+> Note: multiple different clients *can* share a long-lived TCP connection with a single socket on the server, but it is likely better to map individual sockets.
+
+## 9. Make requests from the `Stub` and see how many requests and responses a duplex can make!
+```javascript
+// /clients/heavyMath.js
+const { Stub } = require( 'firecomm' );
+const package = require( '../package.js' )
+const stub = new Stub( 
+  package.ChattyMath, 
+  'localhost: 3000',
+);
+
+let start;
+let end;
+const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
+  .send({requests: 1, responses: 0})
+  .on( 'metadata', (metadata) => {
+    start = Number(process.hrtime.bigint());
+    console.log(metadata.getMap())
+  })
+  .on( 'error', (err) => console.error(err))
+  .on( 'data', (benchmark) => {
+    bidi.send(
+      {
+        requests: benchmark.requests + 1, 
+        responses: benchmark.responses
+      }
+    )
+    if (benchmark.responses % 10000 === 0) {
+      end = Number(process.hrtime.bigint());
+    console.log(
+      'server address:', bidi.getPeer(),
+      '\ntotal number of responses:', benchmark.responses,
+      '\navg millisecond speed per response:', ((end - start) /1000000) / benchmark.responses
+    )
+  }
+});
+```
+> Run your new firecomm/gRPC-Node client with: `node /clients/chattyMath.js`. It may also be worthwhile to map this command to a custom command like `npm run math` in your `package.json`.
+
+Now enjoy the power of gRPCs! Feel free to construct multiple Stubs to any number of ports, bind any number of ports to the Server, experiment and enjoy!
