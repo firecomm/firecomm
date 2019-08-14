@@ -33,7 +33,9 @@ xdescribe("Unit tests for Server", () => {
       server.bind({ port: "0.0.0.0:3000" });
     }).toThrow();
   });
+});
 
+describe("Tests for addService", () => {
   it("addService composes and adds an async function.", () => {
     const server = new Server();
     server.addService(testService, {
@@ -80,17 +82,17 @@ xdescribe("Unit tests for Server", () => {
   });
 });
 
-describe("Unit tests for bind.", () => {
+xdescribe("Unit tests for bind.", () => {
   it("Bind should support a single port insecurely if no config supplied.", () => {
     const server = new Server();
     const boundPorts = server.bind("0.0.0.0:3000");
-    expect(boundPorts.length).toBe(1);
+    expect(server._ports.length).toBe(1);
   });
 
   it("If no cert/key is passed with an array of ports, they are all generated but insecure.", () => {
     const server = new Server();
     const boundPorts = server.bind(["0.0.0.0:3000", "0.0.0.0:3001"]);
-    expect(boundPorts.length).toBe(2);
+    expect(server._ports.length).toBe(2);
   });
 
   it("Properly binds one SSL", () => {
@@ -101,7 +103,7 @@ describe("Unit tests for bind.", () => {
       privateKey: keyPath,
       certificate: certPath
     });
-    expect(boundPorts.length).toBe(1);
+    expect(server._ports.length).toBe(1);
   });
 
   it("If array of ports and certs/keys are passed each port at index in ports array is bound matching the cert at the same index of the certs array", () => {
@@ -118,7 +120,7 @@ describe("Unit tests for bind.", () => {
         null
       ]
     );
-    expect(boundPorts.length).toBe(2);
+    expect(server._ports.length).toBe(2);
   });
 
   it("If one cert/key pair is passed, it is applied to all of the different ports.", () => {
@@ -129,7 +131,7 @@ describe("Unit tests for bind.", () => {
       privateKey: keyPath,
       certificate: certPath
     });
-    expect(boundPorts.length).toBe(2);
+    expect(server._ports.length).toBe(2);
   });
 });
 
