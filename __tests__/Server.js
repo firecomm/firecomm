@@ -86,13 +86,13 @@ describe("Tests for addService", () => {
 xdescribe("Unit tests for bind.", () => {
   xit("Bind should support a single port insecurely if no config supplied.", () => {
     const server = new Server();
-    const boundPorts = server.bind("0.0.0.0:3000");
+    server.bind("0.0.0.0:3000");
     expect(server._ports.length).toBe(1);
   });
 
   xit("If no cert/key is passed with an array of ports, they are all generated but insecure.", () => {
     const server = new Server();
-    const boundPorts = server.bind(["0.0.0.0:3001", "0.0.0.0:3002"]);
+    server.bind(["0.0.0.0:3001", "0.0.0.0:3002"]);
     expect(server._ports.length).toBe(2);
   });
 
@@ -100,7 +100,7 @@ xdescribe("Unit tests for bind.", () => {
     const server = new Server();
     let certPath = path.join(__dirname, "/test1.crt");
     let keyPath = path.join(__dirname, "/test1.key");
-    const boundPorts = server.bind("0.0.0.0:3003", {
+    server.bind("0.0.0.0:3003", {
       privateKey: keyPath,
       certificate: certPath
     });
@@ -111,7 +111,7 @@ xdescribe("Unit tests for bind.", () => {
     const server = new Server();
     let certPath = path.join(__dirname, "/test1.crt");
     let keyPath = path.join(__dirname, "/test1.key");
-    const boundPorts = server.bind(
+    server.bind(
       ["0.0.0.0:3004", "0.0.0.0.3005"],
       [
         {
@@ -128,7 +128,7 @@ xdescribe("Unit tests for bind.", () => {
     const server = new Server();
     let certPath = path.join(__dirname, "/test1.crt");
     let keyPath = path.join(__dirname, "/test1.key");
-    const boundPorts = server.bind(["0.0.0.0:3006", "0.0.0.0.3007"], {
+    server.bind(["0.0.0.0:3006", "0.0.0.0.3007"], {
       privateKey: keyPath,
       certificate: certPath
     });
