@@ -104,18 +104,32 @@ describe("Unit tests for bind.", () => {
     expect(boundPorts.length).toBe(1);
   });
 
-  xit("If array of ports and certs/keys are passed each port at index in ports array is bound matching the cert at the same index of the certs array", () => {});
-
-  xit("If one cert/key pair is passed, it is applied to all of the different ports.", () => {
+  it("If array of ports and certs/keys are passed each port at index in ports array is bound matching the cert at the same index of the certs array", () => {
     const server = new Server();
     let certPath = path.join(__dirname, "/test1.crt");
     let keyPath = path.join(__dirname, "/test1.key");
-    const boundPorts = server.bind("0.0.0.0:3000", {
+    const boundPorts = server.bind(
+      ["0.0.0.0:3000", "0.0.0.0.3001"],
+      [
+        {
+          privateKey: keyPath,
+          certificate: certPath
+        },
+        null
+      ]
+    );
+    expect(boundPorts.length).toBe(2);
+  });
+
+  it("If one cert/key pair is passed, it is applied to all of the different ports.", () => {
+    const server = new Server();
+    let certPath = path.join(__dirname, "/test1.crt");
+    let keyPath = path.join(__dirname, "/test1.key");
+    const boundPorts = server.bind(["0.0.0.0:3000", "0.0.0.0.3001"], {
       privateKey: keyPath,
       certificate: certPath
     });
-    console.log(boundPorts);
-    expect(boundPorts[0]).toBeGreaterThan(0);
+    expect(boundPorts.length).toBe(2);
   });
 });
 
