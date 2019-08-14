@@ -1,7 +1,7 @@
 # FIRECOMM
 > 2.0.1.beta release
 
-Framework extending gRPC-Node. Standardized syntax for transpiling protoBufs into Node.js, creating servers, clients, and managing gRPC channels in distributed systems.
+Framework extending gRPC-Node. Standardized syntax for transpiling protoBufs into Node.js, creating servers, clients, and managing gRPC channels in distributed systems. Check out the [documentation website](https://firecomm.github.io)!
 
 ## Purpose
 
