@@ -8,6 +8,8 @@ const stub = new routeguide.RouteGuide(
   grpc.credentials.createInsecure()
 );
 
+console.log(stub.__proto__);
+
 const firstChat = {
   message: "Hello"
 };
