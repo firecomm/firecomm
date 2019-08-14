@@ -38,11 +38,10 @@ server.addService(
 let certPath = path.join(__dirname, "/server.crt");
 let keyPath = path.join(__dirname, "/server.key");
 
-// {
-//   privateKey: keyPath,
-//   certificate: certPath
-// }
-const result = server.bind(["0.0.0.0:3000", "192.168.10.82:3001"]);
+const result = server.bind(["0.0.0.0:3000", "192.168.10.82:3001"], {
+  privateKey: keyPath,
+  certificate: certPath
+});
 // console.log({ result });
 // console.log({ server });
 // console.log(server.__proto__);
