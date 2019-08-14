@@ -98,7 +98,7 @@ module.exports = {
 	##### RPC_METHOD *property* // must match each `rpc Method` named in the `.proto`
 	##### HANDLER_FUNCTION *value* // function to handle the `rpc Method`
 	##### *OR*
-	##### MIDDLEWARE_STACK *value* // array of *functions* to handle the `rpc Method`. The main `HANDER_FUNCTION` to be run must be last in the array.
+	##### MIDDLEWARE_STACK *value* // array of *functions* to handle the `rpc Method`. The main `HANDLER_FUNCTION` to be run must be last in the array.
 ```javascript
 const { Server } = require( 'firecomm' );
 const server = new Server();
