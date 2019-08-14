@@ -49,8 +49,16 @@ new Server()
 // //   server.handlers["/routeguide.RouteGuide/UnaryChat"]
 // // );
 
-// let certPath = path.join(__dirname, "/server.crt");
-// let keyPath = path.join(__dirname, "/server.key");
+
+// {private_key: (__dirname + '/server.crt'), certificate: (__dirname +
+// '/server.key')}
+server.bind("0.0.0.0:3000");
+// {
+//   privateKey: __dirname + "/server.key",
+//   certificate: __dirname + "/server.crt"
+// }
+// console.log({server})
+// console.log(new grpc.Server().__proto__)
 
 // // const result = 
 // server.bind(["0.0.0.0:3000", "0.0.0.0:2999"], [{

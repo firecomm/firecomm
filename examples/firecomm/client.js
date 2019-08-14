@@ -39,9 +39,9 @@ const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
 
 // let certificate = path.join(__dirname, "/server.crt");
 
-// const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000", {
-//   certificate
-// });
+
+const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
+
 
 
 // const healthStub = new firecomm.HealthStub("localhost:3000");
@@ -74,13 +74,6 @@ const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
 //   message: "Hello"
 // };
 
-// const newClient = stub
-//   .clientStream({ meta: "data" }, [interceptorProvider])
-//   .send({ message: "yolo" })
-//   .send(firstChat)
-//   .on(({ message }) => console.log({ message }))
-//   .catch(err => console.log({ err }));
-
 // setInterval(() => {
 //   newClient.send({ message: "please" });
 // }, 1000);
@@ -98,16 +91,25 @@ const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
 //   .on("status", data => console.log(data))
 //   .catch(err => console.error(err));
 
-// const testClientStream = () => {
-//   const clientStream = stub.clientStream((err, res) => {
-//     if (err) console.log(err);
-//     console.log({ res });
-//   });
-//   clientStream.write(firstChat);
-//   clientStream.end();
-// };
 
-// testClientStream();
+const testClientStream = () => {
+  const clientStream = stub.clientStream((err, res) => {
+    if (err) console.log(err);
+    console.log({ res });
+    clientStream.write(firstChat);
+  });
+  console.log({ clientStream });
+  clientStream.write(firstChat);
+  console.log({ clientStream });
+  clientStream.write(firstChat);
+
+  // setTimeout(() => {
+  //   // clientStream.write(firstChat);
+  //   clientStream.end();
+  // }, 400);
+};
+
+testClientStream();
 
 // const newClient = stub.clientStream(
 //   {hello: 'world yo',
@@ -187,5 +189,6 @@ const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
 // duplexStream.catch(err => {
 //   console.log({ err });
 // });
+
 
 // testBidiChat();

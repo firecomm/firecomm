@@ -33,20 +33,21 @@ function clientStream(call) {
     console.log(data);
   });
   setTimeout(() => call.send({ message: "world" }), 5000);
+
 }
 
 function bidiChat(call) {
   // console.log('context keys', Object.keys(context));
   // console.log('context proto', context.__proto__)
-  console.log(call.head);
-  call.on("data", data => {
+
+  context.on("data", data => {
     console.log("data:", data);
-    call.send({ message: data.message + " World" });
-    call
-      .set({ metadatatest: "test value" })
-      .send({ message: data.message + " World" });
+    context.write({ message: data.message + " World" });
   });
-  // .send({ message: "hello" + " World" });
+  // context.throw(new Error("error"));
+  setTimeout(() => {
+    context.end();
+  }, 3000);
 }
 
 module.exports = {
