@@ -5,8 +5,6 @@ const path = require("path");
 
 const package = require("./packageDefinition");
 
-// console.log({ package });
-
 const {
   unaryChat,
   serverStream,
@@ -37,15 +35,16 @@ server.addService(
 //   server.handlers["/routeguide.RouteGuide/UnaryChat"]
 // );
 
-// let certPath = path.join(__dirname, '/server.crt');
-// let keyPath = path.join(__dirname, '/server.key');
+let certPath = path.join(__dirname, "/server.crt");
+let keyPath = path.join(__dirname, "/server.key");
 
-// {private_key: (__dirname + '/server.crt'), certificate: (__dirname +
-// '/server.key')}
-server.bind("0.0.0.0:3000");
-// console.log({server})
+const result = server.bind(["0.0.0.0:3000", "192.168.10.82:3001"], {
+  privateKey: keyPath,
+  certificate: certPath
+});
+// console.log({ result });
+// console.log({ server });
+// console.log(server.__proto__);
 // console.log(new grpc.Server().__proto__)
 
 server.start();
-
-// console.log(server.server)
