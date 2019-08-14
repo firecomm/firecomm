@@ -21,7 +21,7 @@ const testService = testProto.Test;
 
 testService._serviceName = "Test";
 
-xdescribe("Unit tests for Server", () => {
+describe("Unit tests for Server", () => {
   it("Constructor extends the grpc server class.", () => {
     const server = new Server();
     expect(server instanceof grpc.Server).toBeTruthy();
@@ -36,7 +36,7 @@ xdescribe("Unit tests for Server", () => {
 });
 
 describe("Tests for addService", () => {
-  xit("addService composes and adds an async function.", () => {
+  it("addService composes and adds an async function.", () => {
     const server = new Server();
     server.addService(testService, {
       unaryCall: jest.fn(function() {})
@@ -46,7 +46,7 @@ describe("Tests for addService", () => {
     ).toBe("AsyncFunction");
   });
 
-  xit("addService throws an error when you add a handlername not included in the service.", () => {
+  it("addService throws an error when you add a handlername not included in the service.", () => {
     const server = new Server();
     expect(() => {
       server.addService(testService, {
@@ -82,7 +82,7 @@ describe("Tests for addService", () => {
   });
 });
 
-xdescribe("Unit tests for bind.", () => {
+describe("Unit tests for bind.", () => {
   it("Bind should support a single port insecurely if no config supplied.", () => {
     const server = new Server();
     const boundPorts = server.bind("0.0.0.0:3000");
@@ -135,7 +135,7 @@ xdescribe("Unit tests for bind.", () => {
   });
 });
 
-xdescribe("Uncaught Error Handling.", () => {
+describe("Uncaught Error Handling.", () => {
   it("Server level error handling should receive error and context object", () => {
     const mockErrorHandler = jest.fn();
     const server = new Server(mockErrorHandler);
@@ -167,14 +167,14 @@ xdescribe("Uncaught Error Handling.", () => {
       mockErrorHandler
     );
     const fakeObject = {};
-    server.handlers[Object.keys(server.handlers)[0]].func(fakeObject);
+    server.handlers[Object.keys(server.handlers)[2]].func(fakeObject);
     expect(mockErrorHandler.mock.calls.length).toBe(1);
     expect(mockErrorHandler.mock.calls[0][0]).toBeInstanceOf(Error);
     expect(typeof mockErrorHandler.mock.calls[0][1] === "object").toBeTruthy();
   });
 });
 
-xdescribe("Server tests for health check", () => {
+describe("Server tests for health check", () => {
   const server = new Server();
 
   it("Has a health check Service.", () => {});

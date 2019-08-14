@@ -5,8 +5,6 @@ const path = require("path");
 
 const package = require("./packageDefinition");
 
-// console.log({ package });
-
 const {
   unaryChat,
   serverStream,
