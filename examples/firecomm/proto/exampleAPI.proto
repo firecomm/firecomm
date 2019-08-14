@@ -1,0 +1,13 @@
+// proto/exampleAPI.proto
+syntax = "proto3";
+
+package exampleAPI;
+
+service ChattyMath {
+  rpc BidiMath (stream Benchmark) returns (stream Benchmark) {};
+}
+
+message Benchmark {
+  double requests = 1;
+  double responses = 2;
+}
