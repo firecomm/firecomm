@@ -14,27 +14,27 @@ describe("Tests for clientStreamCall.", () => {
     expect(mockMethod.mock.calls.length).toBe(1);
   });
 
-  it("Interceptor array in second position gets called in the right place.", () => {
-    clientStreamCall(
-      that,
-      "methodName",
-      { meta: "value" },
-      [() => {}],
-      () => {}
-    );
-    expect(
-      typeof mockMethod.mock.calls[0][0].hasOwnProperty("_internal_repr")
-    ).toBeTruthy();
-    expect(
-      typeof mockMethod.mock.calls[0][1].hasOwnProperty("intercpetors")
-    ).toBeTruthy();
-  });
+  // it("Interceptor array in second position gets called in the right place.", () => {
+  //   clientStreamCall(
+  //     that,
+  //     "methodName",
+  //     { meta: "value" },
+  //     [() => {}],
+  //     () => {}
+  //   );
+  //   expect(
+  //     typeof mockMethod.mock.calls[0][0].hasOwnProperty("_internal_repr")
+  //   ).toBeTruthy();
+  //   expect(
+  //     typeof mockMethod.mock.calls[0][1].hasOwnProperty("intercpetors")
+  //   ).toBeTruthy();
+  // });
 
-  it("Throws when no callback is supplied.", () => {
-    expect(() => {
-      clientStreamCall(that, "methodName", { meta: "value" }, [() => {}]);
-    }).toThrow();
-  });
+  // it("Throws when no callback is supplied.", () => {
+  //   expect(() => {
+  //     clientStreamCall(that, "methodName", { meta: "value" }, [() => {}]);
+  //   }).toThrow();
+  // });
 
   it("Meta object in the second position gets called in the right place.", () => {
     clientStreamCall(
