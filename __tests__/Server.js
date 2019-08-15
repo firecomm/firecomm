@@ -139,7 +139,8 @@ xdescribe("Unit tests for bind.", () => {
 describe("Uncaught Error Handling.", () => {
   it("Server level error handling should receive error and context object", () => {
     const mockErrorHandler = jest.fn();
-    const server = new Server(mockErrorHandler);
+    const mockErrorWrapper = (...args) => mockErrorHandler(...args);
+    const server = new Server(mockErrorWrapper);
     const mockMiddleware = jest.fn((err, call) => {
       throw new Error("error from mock middleware");
     });
@@ -155,7 +156,8 @@ describe("Uncaught Error Handling.", () => {
 
   it("Service level error handlers overwrite server level error handlers", () => {
     const mockErrorHandler = jest.fn();
-    const server = new Server(jest.fn());
+    const mockErrorWrapper = (...args) => mockErrorHandler(...args);
+    const server = new Server(mockErrorWrapper);
     const mockMiddleware = jest.fn((err, call) => {
       throw new Error("error from mock middleware");
     });
