@@ -1,11 +1,13 @@
 # FIRECOMM
-> 2.0.1.beta release
+![badge](https://img.shields.io/badge/version-v2.0.3.beta%20release-brightgreen)
+![badge](https://img.shields.io/badge/build-passing-green?labelColor=3f2eff)
+![badge](https://img.shields.io/badge/license-Apache--2.0-green)
 
-Framework extending gRPC-Node. Standardized syntax for transpiling protoBufs into Node.js, creating servers, clients, and managing gRPC channels in distributed systems. Check out the [documentation website](https://firecomm.github.io)!
+> 2.0.3.beta release
 
-## Purpose
+Feature library for gRPC-Node/js. Core functions for packaging a .proto file, spinning up Servers and client Stubs, unified client-side and server-side API, chainable RPC call methods, event listeners--for data, metadata, cancellation, errors, status changes, middleware, client-side interceptors, error boundaries, and support for idempotent, cacheable, and corked requests. 
 
-**gRPC-Node** has a complex API but does not ***document*** or ***support*** all of the features available in **gRPC-goLang** or **gRPC-Java**. We standardize the syntax to expose all ***existing*** features and extend ***undersupported*** features in the Node.js ecosystem. 
+Check out the [documentation website](https://firecomm.github.io)!
 
 # Getting Started
 ## Install
