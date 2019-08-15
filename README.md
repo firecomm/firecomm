@@ -1,3 +1,5 @@
+https://img.shields.io/badge/version-v2.0.1.beta%20release-brightgreen
+
 # FIRECOMM
 > 2.0.1.beta release
 
