@@ -62,7 +62,7 @@ const { Server } = require( 'firecomm' );
 const server = new Server();
 ```
 
-> Under the hood, Firecomm extends Google's gRPC core Server. You can pass an Object to the Server as the first argument to configure advanced options. You can see all of the Object properties and the values you can set them to in the gRPC core docs [here](https://grpc.github.io/grpc/core/group__grpc__arg__keys.html).
+> Under the hood, Firecomm extends Google's gRPC core channel configurations. You can pass an Object to the Server as the first argument to configure advanced options. You can see all of the Object properties and the values you can set them to in the gRPC core docs [here](https://grpc.github.io/grpc/core/group__grpc__arg__keys.html).
 
 ## 4. Define the server-side Handler
 
@@ -174,9 +174,10 @@ const stub = new Stub(
 	'localhost: 3000', // also can be '0.0.0.0: 3000'
 );
 ```
-> Note: multiple different clients *can* share a long-lived TCP connection with a single address bound on the server, but it is likely better to map individual addresses per service.
+> Under the hood, Firecomm extends Google's gRPC core channel configurations. You can pass an Object to the Stub as the second argument to configure advanced options. **Note: Any channel configurations on the client Stub should match the configurations on the server it is requesting to.** You can see all of the Object properties and the values you can set them to in the gRPC core docs [here](https://grpc.github.io/grpc/core/group__grpc__arg__keys.html).
 
 ## 9. Make requests from the Stub and see how many requests and responses a duplex can make!
+Before we can interact with a server, our client Stub needs to invoke the RPC Method. RPC Methods now exist on the Stub because we passed the package.Service into the Stub constructor. Because we defined the RPC Method to send a stream of and return a stream, both the client Stub and the server can send and listen for any number of Messages. The client Stub always makes the first request. As soon as the server Handler receives the request, the ping-pong will begin. Similarly to the server Handler, now on the client-side, we will send one Message to begin and begin listening for server requests and immediately sending back client responses in a ping-pong pattern. Again, metadata is sent only once at the start of the exchange, which will trigger Node's built in timers to start clocking the nanoseconds between requests and responses.
 ```javascript
 // /clients/chattyMath.js
 const { Stub } = require( 'firecomm' );
@@ -215,3 +216,5 @@ const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
 > Run your new firecomm/gRPC-Node client with: `node /clients/chattyMath.js`. It may also be worthwhile to map this command to a script like `npm run client` in your `package.json`.
 
 Now enjoy the power of gRPCs! See how many requests and responses you can make per second with one duplex RPC method! 
+
+Feel free to add more client Stubs to run services in parallel to one server address, bind multiple addresses to the Server, run multiple clients with their own Stubs. Once you feel comfortable, dive into modifying the .proto file and add multiple RPC methods to one Service, add multiple Services to a package, change the message fields or add multiple messages with different fields to send and receive.
