@@ -14,7 +14,7 @@ npm i --save firecomm
 ```
 
 ## 1. Define a .proto file
-The .proto file is the schema for your Servers and client Stubs. It defines the package you will build which will give your Server and Client superpowers -- Remote Procedure Call (RPC) methods. RPC methods define what the client Stubs send and what the server Handlers respond with. This example will use "proto3" syntax -- you can read more about protobufs at Google's developer docs [here](https://developers.google.com/protocol-buffers/docs/proto3).
+The .proto file is the schema for your Servers and client Stubs. It defines the package you will build which will give your Server and Client superpowers -- Remote Procedure Call (RPC) methods. RPC methods define what Message Object the client Stubs send and what the server Handlers respond with.
 ```protobuf
 // proto/exampleAPI.proto
 syntax = "proto3";
@@ -31,11 +31,11 @@ message Benchmark {
 }
 ```
 
-> In our example, the RPC method BidiMath will send a stream of Benchmark messages from the client Stub and will *return* a stream of Benchmark messages from the server Handler for BidiMath. The Benchmark message received on either side will be an Object with the properties `requests` and `responses`. The values of `requests` and `responses` will be doubles, or potentially very large numbers.
+> In our example, the RPC method BidiMath will send a stream of Benchmark messages from the client Stub and will *return* a stream of Benchmark messages from the server Handler for BidiMath. The Benchmark message received on either side will be an Object with the properties `requests` and `responses`. The values of `requests` and `responses` will be doubles, or potentially very large numbers. This example will use "proto3" syntax -- you can read more about protobufs and all of the possible Message fields at Google's developer docs [here](https://developers.google.com/protocol-buffers/docs/proto3).
 
 ## 2. Build a package
 
-In order to pass RPC method superpowers to our Server and client Stubs, we first need to package our .proto file. We will use the core `build` function imported from the firecomm library to return out our package of superpowers.
+In order to pass superpowers to our Server and client Stubs, we first need to package our .proto file. We will use the core `build` function imported from the firecomm library to build our package.
 
 ```javascript
 // package.js
@@ -51,10 +51,10 @@ const package = build( PROTO_PATH, CONFIG_OBJECT );
 module.exports = package;
 ```
 
-
+> The config object is passed all the way to the protobufjs loader. For a clearer low-level understanding of the possible configurations, see their npm package documentation [here](https://www.npmjs.com/package/protobufjs).
 
 ## 3. Create a server
-Next, let's construct a *Server* in a new `server` folder and file. 
+Now that we have our package, we need a Server. Let's import the `Server` class from the Firecomm library.
 
 ```javascript
 // /server/server.js
@@ -62,9 +62,11 @@ const { Server } = require( 'firecomm' );
 const server = new Server();
 ```
 
-## 4. Define the server-side handlers for our `ChattyMath` *Service*.
+> Under the hood, Firecomm extends Google's gRPC core Server. You can pass an Object to our server to configure advanced options. You can see all of the Object properties and the values you can set them to in the gRPC core docs [here](https://grpc.github.io/grpc/core/group__grpc__arg__keys.html).
 
-Let's define handler functions for our `BidiMath` *RPC method*. Server-Side handlers are how we will interact with the Client-side requests.
+## 4. Define the server-side Handler
+
+Before we can interact with a client, our Server needs Handlers. Handlers are usually unique to each RPC Method. In order to demonstrate the power of gRPCs, we will be listening for client requests and immediately sending back server responses in a ping-pong pattern. Metadata is sent only once at the start of the exchange, which will trigger Node's built in timers to start clocking the nanoseconds between responses and requests.
 
 ```javascript
 // /server/chattyMathHandlers.js
@@ -102,6 +104,8 @@ module.exports = {
 	BidiMathHandler,
 }
 ```
+
+> As I'm sure you've noticed, the Objects we are receiving and sending have exactly the properties and value-types we defined in the Benchmark message in the .proto file. If you attempt to send an incorrectly formatted Object, the RPC Method will coerce the Object into `{ requests: 0, responses: 0 }`.
 
 ## 5. Add each *Service* from the package to the `Server`
 
