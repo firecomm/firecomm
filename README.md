@@ -3,8 +3,6 @@
 ![badge](https://img.shields.io/badge/build-passing-green?labelColor=444444)
 ![badge](https://img.shields.io/badge/license-Apache--2.0-green)
 
-> 2.0.3.beta release
-
 Feature library for gRPC-Node/js. Core functions for packaging a .proto file, spinning up Servers and client Stubs, unified client-side and server-side API, chainable RPC call methods, event listeners--for data, metadata, cancellation, errors, status changes, middleware, client-side interceptors, error boundaries, and support for idempotent, cacheable, and corked requests. 
 
 Check out the [documentation website](https://firecomm.github.io)!
