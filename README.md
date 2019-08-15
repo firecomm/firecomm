@@ -3,7 +3,7 @@
 ![badge](https://img.shields.io/badge/build-passing-green?labelColor=444444)
 ![badge](https://img.shields.io/badge/license-Apache--2.0-green)
 
-Feature library for gRPC-Node. Core functions for packaging a .proto file, spinning up Servers and client Stubs, unified client-side and server-side API, chainable RPC call methods, event listeners--for data, metadata, cancellation, errors, status changes, middleware, client-side interceptors, error boundaries, and support for idempotent, cacheable, and corked requests. 
+Feature library for gRPC-Node. Core functions for packaging a .proto file, Servers and client Stubs, unified client-side and server-side API, chainable RPC call methods, event listeners---for data, metadata, cancellation, errors, status changes---support for middleware, client-side interceptors, error boundaries, as well as idempotent, cacheable, and corked requests. 
 
 Check out the [documentation website](https://firecomm.github.io)!
 
@@ -14,7 +14,7 @@ npm i --save firecomm
 ```
 
 ## 1. Define a .proto file
-The .proto file is the schema for your Servers and client Stubs. It defines the package you will build which will give your Server and Client superpowers -- Remote Procedure Call (RPC) methods. RPC methods define what the client Stubs send and what the server Handlers respond with. This example will use "proto3" syntax -- you can read more about protobufs [here](https://developers.google.com/protocol-buffers/docs/proto3) at Google's developer docs.
+The .proto file is the schema for your Servers and client Stubs. It defines the package you will build which will give your Server and Client superpowers -- Remote Procedure Call (RPC) methods. RPC methods define what the client Stubs send and what the server Handlers respond with. This example will use "proto3" syntax -- you can read more about protobufs at Google's developer docs [here](https://developers.google.com/protocol-buffers/docs/proto3).
 ```protobuf
 // proto/exampleAPI.proto
 syntax = "proto3";
@@ -33,9 +33,9 @@ message Benchmark {
 
 > In our example, the RPC method BidiMath will send a stream of Benchmark messages from the client Stub and will *return* a stream of Benchmark messages from the server Handler for BidiMath. The Benchmark message received on either side will be an Object with the properties `requests` and `responses`. The values of `requests` and `responses` will be doubles, or potentially very large numbers.
 
-## 2. Let's `build()` a `package`
+## 2. Build a package
 
-Let's pass an absolute path to our `.proto` file to build our *Package*. We will create a `package.js` file which will live in our root folder and `export` an Object containing the compiled *Service* and *RPC method*.
+In order to pass RPC method superpowers to our Server and client Stubs, we first need to package our .proto file. We will use the core `build` function imported from the firecomm library to return out our package of superpowers.
 
 ```javascript
 // package.js
@@ -44,12 +44,14 @@ const path = require( 'path' );
 const PROTO_PATH = path.join( __dirname, './proto/exampleAPI.proto' );
 
 const CONFIG_OBJECT = {
-  keepCase: true, // keeps everything camelCased
-  longs: Number, // compiles the potentially enormous `double`s for our BenchmarkMsg requests and responses into a JavaScript Number rather than a String
+  keepCase: true, // keeps our RPC methods camelCased
+  longs: Number, // compiles the potentially enormous `double`s for our Benchmark requests and responses into a Number rather than a String
 }
 const package = build( PROTO_PATH, CONFIG_OBJECT );
 module.exports = package;
 ```
+
+
 
 ## 3. Create a server
 Next, let's construct a *Server* in a new `server` folder and file. 
