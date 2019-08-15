@@ -14,7 +14,7 @@ npm i --save firecomm
 ```
 
 ## 1. Define a .proto file
-The .proto file is the schema for your Servers and client Stubs. It defines the package you will build which will give your Server and Client superpowers -- Remote Procedure Call (RPC) methods. RPC methods define what the client Stubs send and what the server Handlers respond with. 
+The .proto file is the schema for your Servers and client Stubs. It defines the package you will build which will give your Server and Client superpowers -- Remote Procedure Call (RPC) methods. RPC methods define what the client Stubs send and what the server Handlers respond with. This example will use "proto3" syntax -- you can read more about protobufs [here](https://developers.google.com/protocol-buffers/docs/proto3) at Google's developer docs.
 ```protobuf
 // proto/exampleAPI.proto
 syntax = "proto3";
@@ -31,7 +31,7 @@ message Benchmark {
 }
 ```
 
-> In our example, the RPC method BidiMath will send a Benchmark message as a stream from the client Stub and will *return* a Benchmark message from the server Handler for BidiMath. The Benchmark message on either side will be an Object with the properties `requests` and `responses`. The values of `requests` and `responses` will be doubles, or potentially very large numbers.
+> In our example, the RPC method BidiMath will send a stream of Benchmark messages from the client Stub and will *return* a stream of Benchmark messages from the server Handler for BidiMath. The Benchmark message received on either side will be an Object with the properties `requests` and `responses`. The values of `requests` and `responses` will be doubles, or potentially very large numbers.
 
 ## 2. Let's `build()` a `package`
 
