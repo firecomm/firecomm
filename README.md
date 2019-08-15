@@ -1,6 +1,6 @@
 # FIRECOMM
 ![badge](https://img.shields.io/badge/version-v2.0.3.beta%20release-brightgreen)
-![badge](https://img.shields.io/badge/build-passing-green?labelColor=3f2eff)
+![badge](https://img.shields.io/badge/build-passing-green?labelColor=444444)
 ![badge](https://img.shields.io/badge/license-Apache--2.0-green)
 
 > 2.0.3.beta release
