@@ -38,16 +38,6 @@ server.addService(
 let certPath = path.join(__dirname, "/server.crt");
 let keyPath = path.join(__dirname, "/server.key");
 
-<<<<<<< HEAD
-// {private_key: (__dirname + '/server.crt'), certificate: (__dirname +
-// '/server.key')}
-server.bind("0.0.0.0:3000");
-// {
-//   privateKey: __dirname + "/server.key",
-//   certificate: __dirname + "/server.crt"
-// }
-// console.log({server})
-=======
 // const result = 
 server.bind(["0.0.0.0:3000", "0.0.0.0:2999"], [{
   privateKey: keyPath,
@@ -56,7 +46,6 @@ server.bind(["0.0.0.0:3000", "0.0.0.0:2999"], [{
 // console.log({ result });
 // console.log({ server });
 // console.log(server.__proto__);
->>>>>>> a5fa83183f3a69cef1ffdee83042e0bf890d4ad4
 // console.log(new grpc.Server().__proto__)
 
 server.start();

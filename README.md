@@ -1,3 +1,8 @@
+![badge](https://img.shields.io/badge/version-v1.0.2.alpha%20release-brightgreen)
+![badge](https://img.shields.io/badge/build-passing-green?labelColor=3f2eff)
+![badge](https://img.shields.io/badge/license-Apache--2.0-green)
+
+
 # FIRECOMM
 > 1.0.2.alpha release
 
