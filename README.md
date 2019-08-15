@@ -62,7 +62,7 @@ const { Server } = require( 'firecomm' );
 const server = new Server();
 ```
 
-> Under the hood, Firecomm extends Google's gRPC core Server. You can pass an Object to our server as the first argument to configure advanced options. You can see all of the Object properties and the values you can set them to in the gRPC core docs [here](https://grpc.github.io/grpc/core/group__grpc__arg__keys.html).
+> Under the hood, Firecomm extends Google's gRPC core Server. You can pass an Object to the Server as the first argument to configure advanced options. You can see all of the Object properties and the values you can set them to in the gRPC core docs [here](https://grpc.github.io/grpc/core/group__grpc__arg__keys.html).
 
 ## 4. Define the server-side Handler
 
@@ -122,9 +122,9 @@ new Server()
   BidiMath: BidiMathHandler,
 })
 ```
-> Server's can chain the .addService method as many times as they wish for each Service that we defined in the .proto file. If you have multiple RPC methods in a Service, each should be mapped as a property on the Object with a Handler function as the value. Not mapping all of your RPC Methods will cause a Server error.
+> Servers can chain the .addService method as many times as they wish for each Service that we defined in the .proto file. If you have multiple RPC methods in a Service, each should be mapped as a property on the Object with a Handler function as the value. Not mapping all of your RPC Methods will cause a Server error.
 
-## 6. Bind the server to sockets
+## 6. Bind the server to addresses
 
 ```javascript
 // /server/server.js
@@ -138,7 +138,7 @@ new Server()
 })
   .bind('0.0.0.0: 3000')
 ```
-> Note: `Server`s can be passed an array of strings to bind any number of sockets. For example:
+> The .bind method can be passed an array of strings to accept requests at any number of addresses. For example:
 > ```javascript
 > server.bind( [ 
 >   '0.0.0.0: 3000', 
@@ -163,8 +163,8 @@ new Server()
 ```
 > Run your new firecomm/gRPC-Node server with: `node /server/server.js`. It may also be worthwhile to map this command to `npm start` in your `package.json`.
 
-## 8.  Create a *Stub* for the `ChattyMath` service:
-Now that the *Server* is fully fleshed out, let's create a *Stub* with access to each *RPC method* in the  `ChattyMath` *Service*. We'll create a `chattyMath.js` file which will live inside our `clients` folder.
+## 8.  Create a client Stub for each Service:
+Now that the server is up and running, we have to pass superpowers to the client-side. We open channels by connecting each Stub to the same address as a Server is bound to. In order for the Stub to be able to make RPC Method requests we need to pass the package.Service into a newly constructed `Stub`.
 ```javascript
 // /clients/chattyMath.js
 const { Stub } = require( 'firecomm' );
@@ -174,11 +174,11 @@ const stub = new Stub(
 	'localhost: 3000', // also can be '0.0.0.0: 3000'
 );
 ```
-> Note: multiple different clients *can* share a long-lived TCP connection with a single socket on the server, but it is likely better to map individual sockets.
+> Note: multiple different clients *can* share a long-lived TCP connection with a single address bound on the server, but it is likely better to map individual addresses per service.
 
-## 9. Make requests from the `Stub` and see how many requests and responses a duplex can make!
+## 9. Make requests from the Stub and see how many requests and responses a duplex can make!
 ```javascript
-// /clients/heavyMath.js
+// /clients/chattyMath.js
 const { Stub } = require( 'firecomm' );
 const package = require( '../package.js' )
 const stub = new Stub( 
@@ -212,6 +212,6 @@ const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
   }
 });
 ```
-> Run your new firecomm/gRPC-Node client with: `node /clients/chattyMath.js`. It may also be worthwhile to map this command to a custom command like `npm run math` in your `package.json`.
+> Run your new firecomm/gRPC-Node client with: `node /clients/chattyMath.js`. It may also be worthwhile to map this command to a script like `npm run client` in your `package.json`.
 
-Now enjoy the power of gRPCs! Feel free to construct multiple Stubs to any number of ports, bind any number of ports to the Server, experiment and enjoy!
+Now enjoy the power of gRPCs! See how many requests and responses you can make per second with one duplex RPC method! 
