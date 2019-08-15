@@ -1,16 +1,48 @@
-const grpc = require("grpc");
-const fs = require("fs");
-const path = require("path");
-const routeguide = require("./routeguide.js");
+const { Stub } = require( "../../index" );
+const package = require( './package.js' )
+const stub = new Stub( 
+  package.ChattyMath, 
+  'localhost: 3000',
+);
 
-const firecomm = require("../../index");
+let start;
+let end;
+const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
+  .send({requests: 0, responses: 0})
+  .on( 'metadata', (metadata) => {
+    start = Number(process.hrtime.bigint());
+    console.log(metadata.getMap())
+  })
+  .on( 'error', (err) => console.error(err))
+  .on( 'data', (benchmark) => {
+    bidi.send(
+      {
+        requests: benchmark.requests + 1, 
+        responses: benchmark.responses
+      }
+    )
+    if (benchmark.responses % 10000 === 0) {
+      end = Number(process.hrtime.bigint());
+    console.log(
+      'server address:', bidi.getPeer(),
+      '\ntotal number of responses:', benchmark.responses,
+      '\navg millisecond speed per response:', ((end - start) /1000000) / benchmark.responses
+    )
+  }
+});
+// const grpc = require("grpc");
+// const fs = require("fs");
+// const path = require("path");
+// const routeguide = require("./routeguide.js");
 
-let certificate = path.join(__dirname, "/server.crt");
+// const firecomm = require("../../index");
+
+// let certificate = path.join(__dirname, "/server.crt");
+
 
 const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
-// , {
-//   certificate
-// }
+
+
 
 // const healthStub = new firecomm.HealthStub("localhost:3000");
 
@@ -34,20 +66,13 @@ const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
 //     'localhost:3000', new grpc.credentials.createSsl(certificate));
 // console.log(stub);
 
-const interceptorProvider = require("./interceptorProvider");
+// const interceptorProvider = require("./interceptorProvider");
 
-// console.log(stub.getChannel().getConnectivityState(true))
+// // console.log(stub.getChannel().getConnectivityState(true))
 
-const firstChat = {
-  message: "Hello"
-};
-
-// const newClient = stub
-//   .clientStream({ meta: "data" }, [interceptorProvider])
-//   .send({ message: "yolo" })
-//   .send(firstChat)
-//   .on(({ message }) => console.log({ message }))
-//   .catch(err => console.log({ err }));
+// const firstChat = {
+//   message: "Hello"
+// };
 
 // setInterval(() => {
 //   newClient.send({ message: "please" });
@@ -66,14 +91,23 @@ const firstChat = {
 //   .on("status", data => console.log(data))
 //   .catch(err => console.error(err));
 
-// const testClientStream = () => {
-//   const clientStream = stub.clientStream((err, res) => {
-//     if (err) console.log(err);
-//     console.log({ res });
-//   });
-//   clientStream.write(firstChat);
-//   clientStream.end();
-// };
+
+const testClientStream = () => {
+  const clientStream = stub.clientStream((err, res) => {
+    if (err) console.log(err);
+    console.log({ res });
+    clientStream.write(firstChat);
+  });
+  console.log({ clientStream });
+  clientStream.write(firstChat);
+  console.log({ clientStream });
+  clientStream.write(firstChat);
+
+  // setTimeout(() => {
+  //   // clientStream.write(firstChat);
+  //   clientStream.end();
+  // }, 400);
+};
 
 testClientStream();
 
@@ -142,18 +176,19 @@ testClientStream();
 //   console.log({ err });
 // });
 
-const duplexStream = stub
-  .bidiChat({ meta: "data" }, [interceptorProvider])
-  .send({ message: "from client" })
-  .on(data => console.log(data));
+// const duplexStream = stub
+//   .bidiChat({ meta: "data" }, [interceptorProvider])
+//   .send({ message: "from client" })
+//   .on(data => console.log(data));
 
-duplexStream.on(({ message }) => {
-  console.log(message);
-  duplexStream.send({ message: "from client2" });
-});
+// duplexStream.on(({ message }) => {
+//   console.log(message);
+//   duplexStream.send({ message: "from client2" });
+// });
 
-duplexStream.catch(err => {
-  console.log({ err });
-});
+// duplexStream.catch(err => {
+//   console.log({ err });
+// });
+
 
 // testBidiChat();
