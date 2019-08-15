@@ -51,7 +51,7 @@ const package = build( PROTO_PATH, CONFIG_OBJECT );
 module.exports = package;
 ```
 
-> The config object is passed all the way to the protobufjs loader. For a clearer low-level understanding of the possible configurations, see their npm package documentation [here](https://www.npmjs.com/package/protobufjs).
+> Under the hood, the config object is passed all the way to the protobufjs loader. For a clearer low-level understanding of the possible configurations, see their npm package documentation [here](https://www.npmjs.com/package/protobufjs).
 
 ## 3. Create a server
 Now that we have our package, we need a Server. Let's import the `Server` class from the Firecomm library.
@@ -62,7 +62,7 @@ const { Server } = require( 'firecomm' );
 const server = new Server();
 ```
 
-> Under the hood, Firecomm extends Google's gRPC core Server. You can pass an Object to our server to configure advanced options. You can see all of the Object properties and the values you can set them to in the gRPC core docs [here](https://grpc.github.io/grpc/core/group__grpc__arg__keys.html).
+> Under the hood, Firecomm extends Google's gRPC core Server. You can pass an Object to our server as the first argument to configure advanced options. You can see all of the Object properties and the values you can set them to in the gRPC core docs [here](https://grpc.github.io/grpc/core/group__grpc__arg__keys.html).
 
 ## 4. Define the server-side Handler
 
@@ -107,9 +107,9 @@ module.exports = {
 
 > As I'm sure you've noticed, the Objects we are receiving and sending have exactly the properties and value-types we defined in the Benchmark message in the .proto file. If you attempt to send an incorrectly formatted Object, the RPC Method will coerce the Object into `{ requests: 0, responses: 0 }`.
 
-## 5. Add each *Service* from the package to the `Server`
+## 5. Add the Services
 
-Let's go back to the `server.js` file and map each *Service* onto our `Server`. Mirroring the structure of the `.proto` file, the *Package* Object we built has each *Service* on it as properties. We use the `Server.addService` method to add each `Service` one at a time and map each *RPC method* to the handler we want to use.  
+Let's import the package and add each Service to our Server alongside an Object mapping the name of the RPC Method with the Handler we created.
 
 ```javascript
 // /server/server.js
@@ -122,6 +122,7 @@ new Server()
   BidiMath: BidiMathHandler,
 })
 ```
+> Server's can chain the .addService method as many times as they wish for each Service that we defined in the .proto file. If you have multiple RPC methods in a Service, each should be mapped as a property on the Object with a Handler function as the value. Not mapping all of your RPC Methods will cause a Server error.
 
 ## 6. Bind the server to sockets
 
