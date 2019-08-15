@@ -13,9 +13,8 @@ Check out the [documentation website](https://firecomm.github.io)!
 npm i --save firecomm
 ```
 
-## 1. Define a `.proto` file
-Let's begin by creating a file named `exampleAPI.proto` that will live inside a `proto` folder. This file will define the name of the *Package*, the names of the *Services*, the *RPC methods* and the structured data of each *Message* sent and received.
-
+## 1. Define a .proto file
+The .proto file is the schema for your Servers and client Stubs. It defines the package you will build which will give your Server and Client superpowers -- Remote Procedure Call (RPC) methods. RPC methods define what the client Stubs send and what the server Handlers respond with. 
 ```protobuf
 // proto/exampleAPI.proto
 syntax = "proto3";
@@ -32,7 +31,7 @@ message Benchmark {
 }
 ```
 
-> Each *RPC Method* clearly defines the Message object to be sent and received. The Object we send will have the exact properties `peerSocket` with a string value and `req` or `res` with a value of `double`, which can be a Number or a String in JavaScript based on the build configuration.
+> In our example, the RPC method BidiMath will send a Benchmark message as a stream from the client Stub and will *return* a Benchmark message from the server Handler for BidiMath. The Benchmark message on either side will be an Object with the properties `requests` and `responses`. The values of `requests` and `responses` will be doubles, or potentially very large numbers.
 
 ## 2. Let's `build()` a `package`
 
