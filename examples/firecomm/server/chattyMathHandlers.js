@@ -28,7 +28,7 @@ function BidiMathHandler(bidi) {
     }
   })
 }
-
+ 
 module.exports = { 
-	BidiMathHandler,
+    BidiMathHandler,
 }
