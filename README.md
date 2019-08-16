@@ -3,14 +3,14 @@
 ![badge](https://img.shields.io/badge/build-passing-green?labelColor=444444)
 ![badge](https://img.shields.io/badge/license-Apache--2.0-green)
 
-Feature library for gRPC-Node. Core functions for packaging a .proto file, creating Servers and client Stubs, and a unified API of chainable RPC call methods, client-side and server-side event listeners for data, metadata, cancellation, errors, and status changes, and support for Express-like middleware, client-side interceptors, granular error handling, support for all 74 gRPC channel configurations, as well as idempotent, cacheable, corked and waitForReady requests. 
+Feature library for gRPC-Node. Core functions for packaging a .proto file, creating Servers and client Stubs, and a unified API of chainable RPC call methods, client-side and server-side event listeners for data, metadata, cancellation, errors, and status changes, and support for Express-like middleware, client-side interceptors, granular error handling, continued support for all 74 gRPC channel configurations, as well as idempotent, cacheable, corked and waitForReady requests. 
 
 Check out the [documentation website](https://firecomm.github.io)!
 
 # Getting Started
 ## Install
 ``` 
-npm i --save firecomm
+npm install --save firecomm
 ```
 
 ## 1. Define a .proto file
@@ -44,7 +44,7 @@ const path = require( 'path' );
 const PROTO_PATH = path.join( __dirname, './exampleAPI.proto' );
 
 const CONFIG_OBJECT = {
-  keepCase: true, // keeps our RPC methods camelCased
+  keepCase: true, // keeps our RPC methods camelCased on Stub
   longs: Number, // compiles the potentially enormous `double`s for our Benchmark requests and responses into a Number rather than a String
 }
 const package = build( PROTO_PATH, CONFIG_OBJECT );
@@ -72,15 +72,17 @@ Before we can interact with a client, our Server needs Handlers. Handlers are us
 // /server/chattyMathHandlers.js
 function BidiMathHandler(bidi) {
   let start;
-  let end;
+  let current;
+  let perReq;
+  let perSec;
   bidi
     .on('metadata', (metadata) => {
-      start = Number(process.hrtime.bigint());
+      start = Number(process.hrtime.bigint()); // marks a start time in nanoseconds
       bidi.set({thisSetsMetadata: 'responses incoming'})
-      console.log(metadata.getMap());
+      console.log(metadata.getMap()); // maps the special metadata object as a simple Object
     })
     .on('error', (err) => {
-      console.exception(err)
+      console.error(err)
     })
     .on('data', (benchmark) => {
       bidi.send(
@@ -90,11 +92,14 @@ function BidiMathHandler(bidi) {
         }
       );
       if (benchmark.requests % 10000 === 0) {
-        end = Number(process.hrtime.bigint());
+        current = Number(process.hrtime.bigint()); // marks the current time in nanoseconds
+        perReq = ((current - start) /1000000) / benchmark.requests; // finds the difference in time from start to current, converts nanoseconds to milliseconds, and averages the time per request from total requests
+        perSec = 1 / (perReq / 1000); // inverts milliseconds per request to requests per second
       console.log(
-        'client address:', bidi.getPeer(),
-        '\nnumber of requests:', benchmark.requests,
-        '\navg millisecond speed per request:', ((end - start) /1000000) / benchmark.requests
+        '\nclient address:', bidi.getPeer(), // returns the client address
+        '\nnumber of requests:', benchmark.requests, // total requests
+        '\navg millisecond speed per request:', perReq,
+        '\nrequests per second:', perSec,
       );
     }
   })
@@ -150,7 +155,7 @@ new Server()
 ```javascript
 // /server/server.js
 const { Server } = require( 'firecomm' );
-const package = require( '../package.js' );
+const package = require( '../proto/package.js' );
 const { BidiMathHandler } = require ( './chattyMathHandlers.js' );
 
 new Server()
@@ -190,12 +195,14 @@ const stub = new Stub(
 );
 
 let start;
-let end;
+let current;
+let perRes;
+let perSec;
 const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
   .send({requests: 1, responses: 0})
   .on( 'metadata', (metadata) => {
-    start = Number(process.hrtime.bigint());
-    console.log(metadata.getMap())
+    start = Number(process.hrtime.bigint()); // marks a start time in nanoseconds 
+    console.log(metadata.getMap()) // maps the special metadata object as a simple Object
   })
   .on( 'error', (err) => console.error(err))
   .on( 'data', (benchmark) => {
@@ -206,11 +213,14 @@ const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
       }
     )
     if (benchmark.responses % 10000 === 0) {
-      end = Number(process.hrtime.bigint());
+      current = Number(process.hrtime.bigint()); // marks the current time in nanoseconds 
+      perRes = ((current - start) / 1000000) / benchmark.responses; // finds the difference in time from start to current, converts nanoseconds to milliseconds, and averages the time per response from total responses
+      perSec = 1 / (perRes / 1000); // inverts milliseconds per response to responses per second
     console.log(
-      'server address:', bidi.getPeer(),
-      '\ntotal number of responses:', benchmark.responses,
-      '\navg millisecond speed per response:', ((end - start) /1000000) / benchmark.responses
+      'server address:', bidi.getPeer(), // returns the server address
+      '\ntotal number of responses:', benchmark.responses, // total responses
+      '\navg millisecond speed per response:', perRes,
+      '\nresponses per second:', perSec,
     )
   }
 });
@@ -220,4 +230,3 @@ const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
 Now enjoy the power of gRPCs! See how many requests and responses you can make per second with one duplex RPC method! 
 
 Explore the flexible possibilities! Creatively modify the bidiMath to be full duplex instead of ping-ponging. Add more client Stubs to run services in parallel to one server address, bind multiple addresses to the Server, run multiple clients with their own Stubs requesting from separate addresses, etc. And once you feel comfortable with the clients and servers, dive into modifying the .proto file to change the message fields or add multiple messages with different fields to send and receive, add multiple RPC methods to one Service, or add multiple Services to the package. Then, build the new .proto, add each package.Service to a server, create a Stub with the each matching package.Service and a server address, and explore the endless potential of gRPCs!
-

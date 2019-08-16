@@ -1,5 +1,5 @@
-const { Stub } = require( "../../index" );
-const package = require( './package.js' )
+const { Stub } = require( "../../../index" );
+const package = require( '../proto/package.js' )
 const stub = new Stub( 
   package.ChattyMath, 
   'localhost: 3000',
@@ -40,7 +40,7 @@ const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
 // let certificate = path.join(__dirname, "/server.crt");
 
 
-const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
+// const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
 
 
 
@@ -92,24 +92,24 @@ const stub = new firecomm.Stub(routeguide.RouteGuide, "localhost:3000");
 //   .catch(err => console.error(err));
 
 
-const testClientStream = () => {
-  const clientStream = stub.clientStream((err, res) => {
-    if (err) console.log(err);
-    console.log({ res });
-    clientStream.write(firstChat);
-  });
-  console.log({ clientStream });
-  clientStream.write(firstChat);
-  console.log({ clientStream });
-  clientStream.write(firstChat);
+// const testClientStream = () => {
+//   const clientStream = stub.clientStream((err, res) => {
+//     if (err) console.log(err);
+//     console.log({ res });
+//     clientStream.write(firstChat);
+//   });
+//   console.log({ clientStream });
+//   clientStream.write(firstChat);
+//   console.log({ clientStream });
+//   clientStream.write(firstChat);
 
-  // setTimeout(() => {
-  //   // clientStream.write(firstChat);
-  //   clientStream.end();
-  // }, 400);
-};
+//   // setTimeout(() => {
+//   //   // clientStream.write(firstChat);
+//   //   clientStream.end();
+//   // }, 400);
+// };
 
-testClientStream();
+// testClientStream();
 
 // const newClient = stub.clientStream(
 //   {hello: 'world yo',

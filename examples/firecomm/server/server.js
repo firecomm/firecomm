@@ -1,8 +1,9 @@
-// /server/server.js
-const { Server } = require( 'firecomm' );
-const package = require( '../package.js' );
+// // /server/server.js
+// const { Server } = require( 'firecomm' );
+const { Server } = require( '../../../index.js' );
+const package = require( '../proto/package.js' );
 const { BidiMathHandler } = require ( './chattyMathHandlers.js' );
- 
+
 new Server()
   .addService( 
     package.ChattyMath,   
