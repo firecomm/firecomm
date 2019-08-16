@@ -166,7 +166,7 @@ new Server()
   .bind('0.0.0.0: 3000')
   .start();
 ```
-> Run your new firecomm/gRPC-Node server with: `node /server/server.js`. It may also be worthwhile to map this command to `npm start` in your `package.json`.
+> Run your new firecomm/gRPC-Node server with: `node server/server.js`. It may also be worthwhile to map this command to `npm start` in your `package.json`.
 
 ## 8.  Create a client Stub for each Service:
 Now that the server is up and running, we have to pass superpowers to the client-side. We open channels by connecting each Stub to the same address as a Server is bound to. In order for the Stub to be able to make RPC Method requests we need to pass the package.Service into a newly constructed `Stub`.
@@ -225,7 +225,7 @@ const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
   }
 });
 ```
-> Run your new firecomm/gRPC-Node client with: `node /clients/chattyMath.js`. It may also be worthwhile to map this command to a script like `npm run client` in your `package.json`.
+> Run your new firecomm/gRPC-Node client with: `node clients/chattyMath.js`. It may also be worthwhile to map this command to a script like `npm run client` in your `package.json`.
 
 Now enjoy the power of gRPCs! See how many requests and responses you can make per second with one duplex RPC method! 
 
