@@ -3,7 +3,7 @@
 ![badge](https://img.shields.io/badge/build-passing-green?labelColor=444444)
 ![badge](https://img.shields.io/badge/license-Apache--2.0-green)
 
-Feature library for gRPC-Node. Core functions for packaging a .proto file, creating Servers and client Stubs, and a unified API of chainable RPC call methods, client-side and server-side event listeners for data, metadata, cancellation, errors, and status changes, and support for Express-like middleware, client-side interceptors, granular error handling, continued support for all 74 gRPC channel configurations, as well as idempotent, cacheable, corked and waitForReady requests. 
+Feature library for gRPC-Node. Core functions for packaging a .proto file, creating Servers and client Stubs, and a unified API of chainable RPC call methods, client-side and server-side event listeners for data, metadata, cancellation, errors, and status changes, and support for Express-like middleware, client-side interceptors, granular error handling, support for all 74 gRPC channel configurations, as well as idempotent, cacheable, corked and waitForReady requests. 
 
 Check out the [documentation website](https://firecomm.github.io)!
 
