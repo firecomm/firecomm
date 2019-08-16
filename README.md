@@ -3,7 +3,7 @@
 ![badge](https://img.shields.io/badge/build-passing-green?labelColor=444444)
 ![badge](https://img.shields.io/badge/license-Apache--2.0-green)
 
-Feature library for gRPC-Node. Core functions for packaging a .proto file, creating gRPC channels via Servers and client Stubs, and a unified API with chainable RPC call methods, client-side and server-side event listeners for data, metadata, cancellation, errors, and status changes, and support for Express-like middleware, client-side interceptors, granular error handling, and complete configuration options for gRPC channels, as well as idempotent, cacheable, and corked requests. 
+Feature library for gRPC-Node. Core functions for packaging a .proto file, creating Servers and client Stubs, and a unified API of chainable RPC call methods, client-side and server-side event listeners for data, metadata, cancellation, errors, and status changes, and support for Express-like middleware, client-side interceptors, granular error handling, support for all 74 gRPC channel configurations, as well as idempotent, cacheable, corked and waitForReady requests. 
 
 Check out the [documentation website](https://firecomm.github.io)!
 
@@ -14,7 +14,7 @@ npm i --save firecomm
 ```
 
 ## 1. Define a .proto file
-The .proto file is the schema for your Servers and client Stubs. It defines the package you will build which will give your Server and Client superpowers -- Remote Procedure Call (RPC) methods. RPC methods define what Message Object the client Stubs send and what the server Handlers respond with.
+The .proto file is the schema for your Servers and client Stubs. It defines the package you will build which will give your Server and Client superpowers -- Remote Procedure Call (RPC) methods. RPC methods define what Message the client Stubs send and receive from the server Handlers.
 ```protobuf
 // proto/exampleAPI.proto
 syntax = "proto3";
@@ -31,17 +31,17 @@ message Benchmark {
 }
 ```
 
-> In our example, the RPC method BidiMath will send a stream of Benchmark messages from the client Stub and will *return* a stream of Benchmark messages from the server Handler for BidiMath. The Benchmark message received on either side will be an Object with the properties `requests` and `responses`. The values of `requests` and `responses` will be doubles, or potentially very large numbers. This example will use "proto3" syntax -- you can read more about protobufs and all of the possible Message fields at Google's developer docs [here](https://developers.google.com/protocol-buffers/docs/proto3).
+> In our example, the RPC method BidiMath is fully bidirectional. The Benchmark message received on either side will be an Object with the properties `requests` and `responses`. The values of `requests` and `responses` will be doubles, or potentially very large numbers. You can read more about protobufs and all of the possible Message fields at Google's developer docs [here](https://developers.google.com/protocol-buffers/docs/proto3).
 
 ## 2. Build a package
 
 In order to pass superpowers to our Server and client Stubs, we first need to package our .proto file. We will use the core `build` function imported from the firecomm library to build our package.
 
 ```javascript
-// package.js
+// /proto/package.js
 const { build } = require( 'firecomm' );
 const path = require( 'path' );
-const PROTO_PATH = path.join( __dirname, './proto/exampleAPI.proto' );
+const PROTO_PATH = path.join( __dirname, './exampleAPI.proto' );
 
 const CONFIG_OBJECT = {
   keepCase: true, // keeps our RPC methods camelCased
@@ -114,8 +114,8 @@ Let's import the Handler and the package and add each Service to our Server alon
 ```javascript
 // /server/server.js
 const { Server } = require( 'firecomm' );
-const package = require( '../package.js' );
-const { BidiMathHandler } = require ( './chattyMathHandlers.js );
+const package = require( '../proto/package.js' );
+const { BidiMathHandler } = require ( './chattyMathHandlers.js' );
 
 new Server()
   .addService( package.ChattyMath,   {
@@ -129,7 +129,7 @@ new Server()
 ```javascript
 // /server/server.js
 const { Server } = require( 'firecomm' );
-const package = require( '../package.js' );
+const package = require( '../proto/package.js' );
 const { BidiMathHandler } = require ( './chattyMathHandlers.js' );
 
 new Server()
@@ -151,7 +151,7 @@ new Server()
 // /server/server.js
 const { Server } = require( 'firecomm' );
 const package = require( '../package.js' );
-const { BidiMathHandler } = require ( './heavyMathHandlers.js' );
+const { BidiMathHandler } = require ( './chattyMathHandlers.js' );
 
 new Server()
   .addService( 
@@ -168,7 +168,7 @@ Now that the server is up and running, we have to pass superpowers to the client
 ```javascript
 // /clients/chattyMath.js
 const { Stub } = require( 'firecomm' );
-const package = require( '../package.js' )
+const package = require( '../proto/package.js' )
 const stub = new Stub( 
 	package.ChattyMath, 
 	'localhost: 3000', // also can be '0.0.0.0: 3000'
@@ -183,7 +183,7 @@ Once the RPC Method is invoked, the client Stub always sends the first request. 
 ```javascript
 // /clients/chattyMath.js
 const { Stub } = require( 'firecomm' );
-const package = require( '../package.js' )
+const package = require( '../proto/package.js' )
 const stub = new Stub( 
   package.ChattyMath, 
   'localhost: 3000',
@@ -220,3 +220,4 @@ const bidi = stub.bidiMath({thisIsMetadata: 'let the races begin'})
 Now enjoy the power of gRPCs! See how many requests and responses you can make per second with one duplex RPC method! 
 
 Explore the flexible possibilities! Creatively modify the bidiMath to be full duplex instead of ping-ponging. Add more client Stubs to run services in parallel to one server address, bind multiple addresses to the Server, run multiple clients with their own Stubs requesting from separate addresses, etc. And once you feel comfortable with the clients and servers, dive into modifying the .proto file to change the message fields or add multiple messages with different fields to send and receive, add multiple RPC methods to one Service, or add multiple Services to the package. Then, build the new .proto, add each package.Service to a server, create a Stub with the each matching package.Service and a server address, and explore the endless potential of gRPCs!
+
