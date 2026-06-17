@@ -74,7 +74,7 @@
   "dependencies": {
     "@grpc/proto-loader": "^0.5.1",
     "grpc": "^1.22.2",
-    "jsdoc": "^3.6.3"
+    "jsdoc": "^4.0.5"
   },
   "devDependencies": {
     "jest": "^24.8.0",
